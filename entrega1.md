@@ -202,6 +202,12 @@ O Footwork Drill não pode ser iniciado sem que ao menos uma opção de moviment
 
 _Aplica-se a:_ RF04
 
+**RN06 — Identificação do movimento pelos sinais sonoros**
+
+Os sinais sonoros emitidos durante a execução de um treino devem permitir que o usuário identifique inequivocamente qual movimento deve ser executado. Em modalidades com múltiplos movimentos ou combos configurados, cada estímulo deve ser acompanhado de anúncio sonoro do nome do movimento ou combo correspondente, de forma que o usuário não precise consultar a tela para saber o que executar.
+
+_Aplica-se a:_ RF01, RF02, RF03, RF04
+
 # Matriz de Rastreabilidade RN x RF
 
 |          | RF01 | RF02 | RF03 | RF04 | RF05 | RF06 | RF07 | RF08 | RF09 | RF10 | RF11 | RF12 |
@@ -211,3 +217,4 @@ _Aplica-se a:_ RF04
 | **RN03** |      |      |      |      |      |      |      |      |  X   |  X   |      |      |
 | **RN04** |      |      |      |      |  X   |      |      |      |      |      |      |      |
 | **RN05** |      |      |      |  X   |      |      |      |      |      |      |      |      |
+| **RN06** |  X   |  X   |  X   |  X   |      |      |      |      |      |      |      |      |
