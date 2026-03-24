@@ -1,0 +1,115 @@
+from src.domain.custom_workout import CustomWorkout
+from src.ui.page import Page
+
+
+class CustomWorkoutPage(Page):
+    def __init__(self, ctx):
+        super().__init__(ctx)
+        self._proxies = []
+
+    def render(self) -> str:
+        workouts = self.ctx.app_state.workout_library.list_all()
+        rows = ""
+        for w in workouts:
+            desc = f"<span class='item-desc'>{w.description}</span>" if w.description else ""
+            rows += f"""
+            <div class="library-item" data-name="{w.name}">
+                <div class="item-info">
+                    <strong>{w.name}</strong>
+                    <span>{w.duration // 60}min {w.duration % 60}s</span>
+                    {desc}
+                </div>
+                <div class="item-actions">
+                    <button class="btn-small btn-danger btn-delete" data-name="{w.name}">Excluir</button>
+                </div>
+            </div>
+            """
+
+        empty_msg = '<p class="empty-msg">Nenhum treino personalizado cadastrado.</p>' if not workouts else ""
+
+        return f"""
+        <div class="page-header">
+            <button class="btn-back" id="btn-back">&#8592; Voltar</button>
+            <h1>Treinos Personalizados</h1>
+        </div>
+
+        <div class="config-form add-form">
+            <label>Nome
+                <input type="text" id="in-name" placeholder="ex: Shadow Boxing">
+            </label>
+            <label>Duração (segundos)
+                <input type="number" id="in-duration" value="300" min="1">
+            </label>
+            <label>Descrição (opcional)
+                <textarea id="in-desc" rows="3" placeholder="Instruções, observações..."></textarea>
+            </label>
+            <button class="btn-primary" id="btn-add">Adicionar</button>
+            <p id="form-error" class="error-msg"></p>
+        </div>
+
+        <div class="library-list" id="library-list">
+            {empty_msg}
+            {rows}
+        </div>
+        """
+
+    def mount(self) -> None:
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
+        from js import document  # type: ignore[import-not-found]
+
+        p = create_proxy(lambda e: self.ctx.router.navigate("#/"))
+        document.getElementById("btn-back").addEventListener("click", p)
+        self._proxies.append(p)
+
+        p = create_proxy(lambda e: self._on_add())
+        document.getElementById("btn-add").addEventListener("click", p)
+        self._proxies.append(p)
+
+        self._bind_delete_buttons()
+
+    def destroy(self) -> None:
+        for p in self._proxies:
+            p.destroy()
+
+    def _bind_delete_buttons(self) -> None:
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
+        from js import document  # type: ignore[import-not-found]
+
+        for btn in document.querySelectorAll(".btn-delete"):
+            name = btn.getAttribute("data-name")
+            p = create_proxy(lambda e, n=name: self._on_delete(n))
+            btn.addEventListener("click", p)
+            self._proxies.append(p)
+
+    def _on_add(self) -> None:
+        from js import document  # type: ignore[import-not-found]
+
+        name = document.getElementById("in-name").value.strip()
+        duration_str = document.getElementById("in-duration").value
+        desc = document.getElementById("in-desc").value.strip()
+
+        try:
+            workout = CustomWorkout(name=name, duration=int(duration_str), description=desc)
+            self.ctx.app_state.workout_library.add(workout)
+            self.ctx.app_state.save()
+        except (ValueError, TypeError) as e:
+            document.getElementById("form-error").textContent = str(e)
+            return
+
+        self._rerender()
+
+    def _on_delete(self, name: str) -> None:
+        self.ctx.app_state.workout_library.remove(name)
+        self.ctx.app_state.save()
+        self._rerender()
+
+    def _rerender(self) -> None:
+        from js import document  # type: ignore[import-not-found]
+
+        for p in self._proxies:
+            p.destroy()
+        self._proxies.clear()
+
+        container = document.getElementById("app")
+        container.innerHTML = self.render()
+        self.mount()

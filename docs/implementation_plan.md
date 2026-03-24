@@ -41,7 +41,8 @@ Objetivo: abstrair a Web Audio API para emissão de sinais sonoros e anúncios p
     - [x] Método `play_warning_signal()` — sinal de aviso de fim de round.
     - [x] Método `play_end_signal()` — sinal de fim de round/drill.
 - [x] **Classe `Announcer`** — encapsula Speech Synthesis API do navegador. `src/audio/announcer.py`
-    - [x] Método `announce(text)` — reproduz nome do combo/movimentação via voz sintética (**RN06**).
+    - [x] Método `announce(text)` — reproduz nome do combo/movimentação/fase via voz sintética (**RN06**).
+    - [x] Usado em todas as modalidades: nomes de combos, movimentações, técnica-alvo, fases do round timer (trabalho/descanso/atenção), e fim de treino.
 - [x] **Backends do navegador** — `WebAudioPlayer` (TonePlayer) e `WebSpeechBackend` (SpeechBackend). `src/audio/web_backends.py`
 - [x] Testes unitários via fake backends (16 testes — `tests/test_audio_engine.py`, `tests/test_announcer.py`).
 - [ ] Testes manuais de reprodução de áudio no navegador.
@@ -97,31 +98,36 @@ Objetivo: implementar a máquina de estados de cada modalidade de treino (sem UI
 
 Objetivo: construir as telas da aplicação, conectando UI às classes de domínio e sessão.
 
-- [ ] **Estrutura base HTML** — `index.html` com carregamento do PyScript, layout responsivo (**RNF05**), navegação entre telas.
-- [ ] **Classe `Router`** — gerencia navegação SPA (single-page) entre telas via hash ou estado interno.
-- [ ] **Classe abstrata `Page`** — base para cada tela da aplicação.
-    - [ ] Métodos: `render()`, `bind_events()`, `destroy()`.
-- [ ] **`HomePage(Page)`** — tela inicial com acesso às modalidades e ao calendário.
-- [ ] **`RoundTimerPage(Page)`** — formulário de configuração + tela de execução do Round Timer (**RF01**).
-    - [ ] Exibe timer com contagem regressiva, round atual, status (trabalho/descanso).
-    - [ ] Botões: iniciar, pausar, parar.
-    - [ ] Integração com `RoundTimerSession` e `AudioEngine`.
-- [ ] **`TimingDrillPage(Page)`** — formulário de configuração + tela de execução do Timing Drill (**RF02**).
-    - [ ] Exibe timer, estímulo visual acompanhando o sonoro.
-    - [ ] Integração com `TimingDrillSession`, `AudioEngine` e `Announcer`.
-- [ ] **`ComboDrillPage(Page)`** — formulário de configuração + tela de execução do Combo Drill (**RF03**).
-    - [ ] Exibe combo atual sendo chamado.
-    - [ ] Integração com `ComboDrillSession`, `AudioEngine` e `Announcer`.
-- [ ] **`FootworkDrillPage(Page)`** — formulário de configuração + tela de execução do Footwork Drill (**RF04**).
-    - [ ] Exibe movimentação atual sendo chamada.
-    - [ ] Integração com `FootworkDrillSession`, `AudioEngine` e `Announcer`.
-- [ ] **`ComboLibraryPage(Page)`** — CRUD de combos (**RF06**).
-    - [ ] Listagem, formulário de criação/edição, exclusão com confirmação.
-- [ ] **`FootworkMovePage(Page)`** — CRUD de movimentações (**RF07**).
-    - [ ] Listagem, formulário de criação/edição, exclusão com confirmação.
-- [ ] **`CustomWorkoutPage(Page)`** — CRUD de treinos personalizados (**RF05**).
-    - [ ] Listagem, formulário de criação/edição, exclusão com confirmação.
-- [ ] Persistência automática via `AppState.save()` após cada operação CRUD (**RF11**).
+- [x] **Estrutura base HTML** — `index.html` com PyScript 2024.1.1, CSS dark theme responsivo (**RNF05**), container `#app`. `index.html`
+- [x] **Configuração PyScript** — `pyscript.toml` mapeando `./src/` para imports.
+- [x] **Classe `Router`** — navegação SPA hash-based com `resolve()`, `navigate()`, `start()`. `src/ui/router.py`
+- [x] **Classe abstrata `Page`** — `render()` → HTML string, `mount()` → bind events, `destroy()` → cleanup. `src/ui/page.py`
+- [x] **Classe `AppContext`** — container para app_state, audio_engine, announcer, router. `src/ui/app_context.py`
+- [x] **Classe `DrillTimer`** — wrapper de `setInterval` chamando `session.tick()` a cada segundo. `src/ui/drill_timer.py`
+- [x] **`HomePage(Page)`** — grid de navegação para modalidades e gerenciamento. `src/ui/pages/home_page.py`
+- [x] **`RoundTimerPage(Page)`** — config + execução do Round Timer (**RF01**). `src/ui/pages/round_timer_page.py`
+    - [x] Timer com contagem regressiva, round atual, fase trabalho/descanso.
+    - [x] Botões: iniciar, pausar/continuar, parar.
+    - [x] Integração com `RoundTimerSession` e `AudioEngine`.
+- [x] **`TimingDrillPage(Page)`** — config + execução do Timing Drill (**RF02**). `src/ui/pages/timing_drill_page.py`
+    - [x] Timer, estímulo visual animado (flash) + anúncio sonoro.
+    - [x] Integração com `TimingDrillSession`, `AudioEngine` e `Announcer`.
+- [x] **`ComboDrillPage(Page)`** — config + execução do Combo Drill (**RF03**). `src/ui/pages/combo_drill_page.py`
+    - [x] Seleção de combos via checkboxes, modo sequencial/aleatório.
+    - [x] Exibe nome + sequência do combo atual; anúncio por voz.
+    - [x] Mensagem e link para biblioteca se não houver combos.
+- [x] **`FootworkDrillPage(Page)`** — config + execução do Footwork Drill (**RF04**). `src/ui/pages/footwork_drill_page.py`
+    - [x] Seleção de movimentações via checkboxes.
+    - [x] Exibe movimentação atual; anúncio por voz.
+- [x] **`ComboLibraryPage(Page)`** — CRUD de combos (**RF06**). `src/ui/pages/combo_library_page.py`
+    - [x] Listagem, adição, exclusão com re-render.
+- [x] **`FootworkMovePage(Page)`** — CRUD de movimentações (**RF07**). `src/ui/pages/footwork_move_page.py`
+    - [x] Listagem, adição, exclusão com re-render.
+- [x] **`CustomWorkoutPage(Page)`** — CRUD de treinos personalizados (**RF05**). `src/ui/pages/custom_workout_page.py`
+    - [x] Listagem, adição, exclusão com re-render.
+- [x] Persistência automática via `AppState.save()` após cada operação CRUD (**RF11**).
+- [x] **Entry point** — `src/main.py` bootstraps backends, state, router, routes.
+- [x] Testes unitários para Router.resolve() e Page.render() (21 testes — `tests/test_router.py`, `tests/test_pages_render.py`).
 - [ ] Testes manuais de usabilidade (**RNF04**) e responsividade (**RNF05**).
 
 ---
