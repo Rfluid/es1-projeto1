@@ -170,6 +170,36 @@ O sistema deve salvar automaticamente no `localStorage` do navegador todas as co
 
 O sistema deve reproduzir sinais sonoros via Web Audio API durante a execução de qualquer modalidade de treino ativa. Os sinais sonoros devem ser distintos para diferentes eventos (ex.: início, alerta, fim), e a reprodução deve ocorrer sem necessidade de arquivos de áudio externos.
 
+## Requisitos Não Funcionais
+
+**RNF01 — Precisão dos temporizadores**
+
+Os temporizadores utilizados nas modalidades de treino devem apresentar desvio máximo de 500 milissegundos em relação ao tempo configurado. A precisão é crítica para modalidades como Timing Drill, onde a imprevisibilidade do estímulo é parte essencial do exercício.
+
+**RNF02 — Latência do sinal sonoro**
+
+O intervalo entre o disparo interno do estímulo e a reprodução efetiva do sinal sonoro pelo navegador não deve exceder 100 milissegundos, garantindo que o áudio seja percebido como imediato pelo usuário durante a execução do treino.
+
+**RNF03 — Compatibilidade com navegadores modernos**
+
+O sistema deve funcionar corretamente nas versões estáveis mais recentes dos navegadores Google Chrome, Mozilla Firefox e Microsoft Edge. Não há requisito de suporte a versões legadas ou ao Internet Explorer.
+
+**RNF04 — Usabilidade sem treinamento prévio**
+
+Um usuário com familiaridade básica com navegadores web deve ser capaz de configurar e iniciar qualquer modalidade de treino sem consultar documentação externa. A interface deve apresentar rótulos, descrições e feedback visual suficientes para guiar o uso intuitivo do sistema.
+
+**RNF05 — Responsividade de layout**
+
+A interface deve ser utilizável em telas com largura mínima de 768 pixels (tablet em modo paisagem) e em monitores de desktop padrão (1280 pixels ou mais). O layout deve se adaptar sem quebra de conteúdo ou perda de funcionalidade.
+
+**RNF06 — Tempo de carregamento inicial**
+
+O sistema deve estar pronto para uso em até 15 segundos após o carregamento da página em uma conexão de banda larga padrão (10 Mbps ou superior), considerando o tempo de inicialização do PyScript via CDN.
+
+**RNF07 — Integridade dos dados persistidos**
+
+Ao restaurar configurações do `localStorage`, o sistema deve validar a estrutura dos dados antes de utilizá-los. Caso os dados estejam corrompidos ou em formato inválido, o sistema deve inicializar com estado padrão e notificar o usuário, sem lançar erros não tratados.
+
 ## Regras de Negócio
 
 **RN01 — Validação de intervalo no Timing Drill e Footwork Drill**
