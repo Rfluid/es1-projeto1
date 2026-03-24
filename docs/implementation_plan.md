@@ -104,21 +104,26 @@ Objetivo: construir as telas da aplicação, conectando UI às classes de domín
 - [x] **Classe abstrata `Page`** — `render()` → HTML string, `mount()` → bind events, `destroy()` → cleanup. `src/ui/page.py`
 - [x] **Classe `AppContext`** — container para app_state, audio_engine, announcer, router. `src/ui/app_context.py`
 - [x] **Classe `DrillTimer`** — wrapper de `setInterval` chamando `session.tick()` a cada segundo. `src/ui/drill_timer.py`
+    - [x] Contagem regressiva de 3 segundos antes de iniciar a sessão (**RF13**). Callback `on_countdown` notifica a UI a cada segundo da contagem.
 - [x] **`HomePage(Page)`** — grid de navegação para modalidades e gerenciamento. `src/ui/pages/home_page.py`
 - [x] **`RoundTimerPage(Page)`** — config + execução do Round Timer (**RF01**). `src/ui/pages/round_timer_page.py`
     - [x] Timer com contagem regressiva, round atual, fase trabalho/descanso.
     - [x] Botões: iniciar, pausar/continuar, parar.
     - [x] Integração com `RoundTimerSession` e `AudioEngine`.
+    - [x] Contagem regressiva 3…2…1 com badge "PREPARE-SE" antes de iniciar (**RF13**).
 - [x] **`TimingDrillPage(Page)`** — config + execução do Timing Drill (**RF02**). `src/ui/pages/timing_drill_page.py`
     - [x] Timer, estímulo visual animado (flash) + anúncio sonoro.
     - [x] Integração com `TimingDrillSession`, `AudioEngine` e `Announcer`.
+    - [x] Contagem regressiva 3…2…1 antes de iniciar (**RF13**).
 - [x] **`ComboDrillPage(Page)`** — config + execução do Combo Drill (**RF03**). `src/ui/pages/combo_drill_page.py`
     - [x] Seleção de combos via checkboxes, modo sequencial/aleatório.
     - [x] Exibe nome + sequência do combo atual; anúncio por voz.
     - [x] Mensagem e link para biblioteca se não houver combos.
+    - [x] Contagem regressiva 3…2…1 antes de iniciar (**RF13**).
 - [x] **`FootworkDrillPage(Page)`** — config + execução do Footwork Drill (**RF04**). `src/ui/pages/footwork_drill_page.py`
     - [x] Seleção de movimentações via checkboxes.
     - [x] Exibe movimentação atual; anúncio por voz.
+    - [x] Contagem regressiva 3…2…1 antes de iniciar (**RF13**).
 - [x] **`ComboLibraryPage(Page)`** — CRUD de combos (**RF06**). `src/ui/pages/combo_library_page.py`
     - [x] Listagem, adição, exclusão com re-render.
 - [x] **`FootworkMovePage(Page)`** — CRUD de movimentações (**RF07**). `src/ui/pages/footwork_move_page.py`
@@ -183,6 +188,8 @@ Objetivo: suportar português (pt-BR) e inglês (en), detectando o idioma padrã
     - [x] "Atenção" / "Warning"
     - [x] "Descanso" / "Rest"
     - [x] "Fim do treino" / "Workout complete"
+- [x] **Strings de contagem regressiva (RF13):**
+    - [x] "PREPARE-SE" / "GET READY"
 - [x] **Mensagens de erro e validação:**
     - [x] "Dados corrompidos no localStorage..." (alert no main.py).
     - [x] Mensagens de `ValueError` exibidas ao usuário (considerar traduzir apenas no nível da UI, não no domínio).
@@ -227,6 +234,7 @@ Objetivo: suportar português (pt-BR) e inglês (en), detectando o idioma padrã
 | RF10      | 6       |
 | RF11      | 3, 5, 6 |
 | RF12      | 2       |
+| RF13      | 5       |
 | RN01      | 1       |
 | RN02      | 4       |
 | RN03      | 6       |

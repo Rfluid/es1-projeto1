@@ -74,6 +74,8 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "custom_workout.description": "Descrição (opcional)",
         "custom_workout.desc_placeholder": "Instruções, observações...",
         "custom_workout.empty": "Nenhum treino personalizado cadastrado.",
+        # -- Countdown --
+        "countdown": "PREPARE-SE",
         # -- Voice announcements --
         "voice.round_work": "Round {round}, trabalho",
         "voice.warning": "Atenção",
@@ -157,6 +159,8 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "custom_workout.description": "Description (optional)",
         "custom_workout.desc_placeholder": "Instructions, notes...",
         "custom_workout.empty": "No custom workouts registered.",
+        # -- Countdown --
+        "countdown": "GET READY",
         # -- Voice announcements --
         "voice.round_work": "Round {round}, work",
         "voice.warning": "Warning",

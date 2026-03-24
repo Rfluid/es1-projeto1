@@ -170,6 +170,10 @@ O sistema deve salvar automaticamente no `localStorage` do navegador todas as co
 
 O sistema deve reproduzir sinais sonoros via Web Audio API durante a execução de qualquer modalidade de treino ativa. Os sinais sonoros devem ser distintos para diferentes eventos (ex.: início, alerta, fim), e a reprodução deve ocorrer sem necessidade de arquivos de áudio externos.
 
+**RF13 — Contagem regressiva antes do início de treino**
+
+O sistema deve exibir uma contagem regressiva de 3 segundos (3… 2… 1…) antes de iniciar a execução efetiva de qualquer modalidade de treino (Round Timer, Timing Drill, Combo Drill e Footwork Drill). Durante a contagem, o display do timer deve mostrar o número restante e uma indicação visual de preparação. A sessão de treino só deve começar após a conclusão da contagem regressiva, permitindo que o usuário se posicione antes do início dos estímulos.
+
 ## Requisitos Não Funcionais
 
 **RNF01 — Precisão dos temporizadores**
@@ -240,11 +244,11 @@ _Aplica-se a:_ RF01, RF02, RF03, RF04
 
 # Matriz de Rastreabilidade RN x RF
 
-|          | RF01 | RF02 | RF03 | RF04 | RF05 | RF06 | RF07 | RF08 | RF09 | RF10 | RF11 | RF12 |
-| -------- | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-| **RN01** |      |  X   |      |  X   |      |      |      |      |      |      |      |      |
-| **RN02** |      |      |  X   |      |      |      |      |      |      |      |      |      |
-| **RN03** |      |      |      |      |      |      |      |      |  X   |  X   |      |      |
-| **RN04** |      |      |      |      |  X   |      |      |      |      |      |      |      |
-| **RN05** |      |      |      |  X   |      |      |      |      |      |      |      |      |
-| **RN06** |  X   |  X   |  X   |  X   |      |      |      |      |      |      |      |      |
+|          | RF01 | RF02 | RF03 | RF04 | RF05 | RF06 | RF07 | RF08 | RF09 | RF10 | RF11 | RF12 | RF13 |
+| -------- | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
+| **RN01** |      |  X   |      |  X   |      |      |      |      |      |      |      |      |      |
+| **RN02** |      |      |  X   |      |      |      |      |      |      |      |      |      |      |
+| **RN03** |      |      |      |      |      |      |      |      |  X   |  X   |      |      |      |
+| **RN04** |      |      |      |      |  X   |      |      |      |      |      |      |      |      |
+| **RN05** |      |      |      |  X   |      |      |      |      |      |      |      |      |      |
+| **RN06** |  X   |  X   |  X   |  X   |      |      |      |      |      |      |      |      |      |

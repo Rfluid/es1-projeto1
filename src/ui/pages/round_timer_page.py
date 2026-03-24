@@ -102,8 +102,24 @@ class RoundTimerPage(Page):
 
         self._session = RoundTimerSession(config)
         self._session.on_event(self._handle_event)
-        self._timer = DrillTimer(self._session, self._update_display)
+        self._timer = DrillTimer(
+            self._session, self._update_display, self._on_countdown
+        )
         self._timer.start()
+
+    def _on_countdown(self, remaining: int) -> None:
+        from js import document  # type: ignore[import-not-found]
+
+        t = self.ctx.i18n.t
+        display = document.getElementById("timer-display")
+        badge = document.getElementById("phase-badge")
+        if remaining > 0:
+            display.textContent = str(remaining)
+            badge.textContent = t("countdown")
+            badge.className = "phase-badge"
+        else:
+            badge.textContent = t("round_timer.phase_work")
+            badge.className = "phase-badge phase-work"
 
     def _on_pause(self) -> None:
         from js import document  # type: ignore[import-not-found]

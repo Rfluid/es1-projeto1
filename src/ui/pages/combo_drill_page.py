@@ -145,8 +145,19 @@ class ComboDrillPage(Page):
         self._total = config.total_duration
         self._session = ComboDrillSession(config)
         self._session.on_event(self._handle_event)
-        self._timer = DrillTimer(self._session, self._update_display)
+        self._timer = DrillTimer(
+            self._session, self._update_display, self._on_countdown
+        )
         self._timer.start()
+
+    def _on_countdown(self, remaining: int) -> None:
+        from js import document  # type: ignore[import-not-found]
+
+        display = document.getElementById("timer-display")
+        if remaining > 0:
+            display.textContent = str(remaining)
+        else:
+            display.textContent = _fmt_time(self._total)
 
     def _on_pause(self) -> None:
         from js import document  # type: ignore[import-not-found]
