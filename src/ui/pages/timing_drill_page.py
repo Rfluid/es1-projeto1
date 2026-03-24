@@ -1,8 +1,8 @@
 from src.domain.drill_config import TimingDrillConfig
-from src.session.timing_drill_session import TimingDrillSession
 from src.session.events import DrillEvent, EventType
-from src.ui.page import Page
+from src.session.timing_drill_session import TimingDrillSession
 from src.ui.drill_timer import DrillTimer
+from src.ui.page import Page
 
 
 def _fmt_time(seconds: int) -> str:
@@ -53,8 +53,8 @@ class TimingDrillPage(Page):
         """
 
     def mount(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         p = create_proxy(lambda e: self.ctx.router.navigate("#/"))
         document.getElementById("btn-back").addEventListener("click", p)

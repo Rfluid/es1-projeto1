@@ -1,6 +1,6 @@
 import pytest
 
-from src.audio.audio_engine import AudioEngine, SignalType, ToneSpec, SIGNAL_TONES
+from src.audio.audio_engine import SIGNAL_TONES, AudioEngine, SignalType, ToneSpec
 
 
 class FakeTonePlayer:

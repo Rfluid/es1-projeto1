@@ -2,15 +2,15 @@ import random
 
 import pytest
 
-from src.domain.combo import Combo
 from src.domain.call_mode import CallMode
+from src.domain.combo import Combo
 from src.domain.drill_config import ComboDrillConfig
-from src.session.events import EventType
 from src.session.combo_drill_session import ComboDrillSession
+from src.session.events import EventType
 
 
 def _combos(n: int = 3) -> list[Combo]:
-    return [Combo(f"Combo {i+1}", f"technique {i+1}") for i in range(n)]
+    return [Combo(f"Combo {i + 1}", f"technique {i + 1}") for i in range(n)]
 
 
 def _cfg(**overrides) -> ComboDrillConfig:
@@ -53,8 +53,12 @@ class TestComboDrillSequential:
         names = [c.data["combo_name"] for c in combo_calls]
         # start=Combo1, tick1=Combo2, tick2=Combo3, tick3=Combo1, tick4=Combo2, tick5=Combo3, tick6=Combo1
         assert names == [
-            "Combo 1", "Combo 2", "Combo 3",
-            "Combo 1", "Combo 2", "Combo 3",
+            "Combo 1",
+            "Combo 2",
+            "Combo 3",
+            "Combo 1",
+            "Combo 2",
+            "Combo 3",
             "Combo 1",
         ]
 
@@ -122,9 +126,7 @@ class TestComboDrillRandom:
         _run_ticks(s, 100)
 
         called_names = {
-            e.data["combo_name"]
-            for e in events
-            if e.event_type == EventType.COMBO_CALL
+            e.data["combo_name"] for e in events if e.event_type == EventType.COMBO_CALL
         }
         expected_names = {c.name for c in combos}
         assert called_names == expected_names
@@ -142,4 +144,6 @@ class TestComboDrillComboData:
 class TestComboDrillValidation:
     def test_empty_combos_raises(self):
         with pytest.raises(ValueError, match="At least one combo"):
-            ComboDrillSession(ComboDrillConfig(combos=[], call_interval=1, total_duration=10))
+            ComboDrillSession(
+                ComboDrillConfig(combos=[], call_interval=1, total_duration=10)
+            )

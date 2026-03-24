@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Callable, List
+from collections.abc import Callable
 
 from src.domain.drill_config import DrillConfig
-from .events import DrillEvent
 
+from .events import DrillEvent
 
 EventCallback = Callable[[DrillEvent], None]
 
@@ -22,7 +22,7 @@ class DrillSession(ABC):
         self._is_running: bool = False
         self._is_paused: bool = False
         self._is_finished: bool = False
-        self._callbacks: List[EventCallback] = []
+        self._callbacks: list[EventCallback] = []
 
     @property
     def config(self) -> DrillConfig:

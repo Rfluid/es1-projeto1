@@ -2,8 +2,8 @@ import random
 
 import pytest
 
-from src.domain.footwork_move import FootworkMove
 from src.domain.drill_config import FootworkDrillConfig
+from src.domain.footwork_move import FootworkMove
 from src.session.events import EventType
 from src.session.footwork_drill_session import FootworkDrillSession
 
@@ -88,9 +88,7 @@ class TestFootworkDrillSession:
         _run_ticks(s, 100)
 
         called_names = {
-            e.data["move_name"]
-            for e in events
-            if e.event_type == EventType.MOVE_CALL
+            e.data["move_name"] for e in events if e.event_type == EventType.MOVE_CALL
         }
         expected = {m.name for m in moves}
         assert called_names == expected
@@ -121,7 +119,7 @@ class TestFootworkDrillSession:
         end_idx = next(
             i for i, e in enumerate(events) if e.event_type == EventType.SESSION_END
         )
-        after_end = events[end_idx + 1:] if end_idx + 1 < len(events) else []
+        after_end = events[end_idx + 1 :] if end_idx + 1 < len(events) else []
         assert all(e.event_type != EventType.MOVE_CALL for e in after_end)
 
 
@@ -129,7 +127,9 @@ class TestFootworkDrillValidation:
     def test_no_moves_raises(self):
         with pytest.raises(ValueError, match="At least one footwork move"):
             FootworkDrillSession(
-                FootworkDrillConfig(moves=[], min_interval=2, max_interval=4, total_duration=10)
+                FootworkDrillConfig(
+                    moves=[], min_interval=2, max_interval=4, total_duration=10
+                )
             )
 
     def test_min_ge_max_raises(self):

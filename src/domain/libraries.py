@@ -1,16 +1,15 @@
-from typing import List, Optional
 
 from .combo import Combo
-from .footwork_move import FootworkMove
 from .custom_workout import CustomWorkout
+from .footwork_move import FootworkMove
 
 
 class ComboLibrary:
     def __init__(self) -> None:
-        self._combos: List[Combo] = []
+        self._combos: list[Combo] = []
 
     @property
-    def combos(self) -> List[Combo]:
+    def combos(self) -> list[Combo]:
         return list(self._combos)
 
     def add(self, combo: Combo) -> None:
@@ -18,7 +17,7 @@ class ComboLibrary:
             raise ValueError(f"A combo named '{combo.name}' already exists.")
         self._combos.append(combo)
 
-    def get_by_name(self, name: str) -> Optional[Combo]:
+    def get_by_name(self, name: str) -> Combo | None:
         for combo in self._combos:
             if combo.name == name:
                 return combo
@@ -28,9 +27,7 @@ class ComboLibrary:
         for i, combo in enumerate(self._combos):
             if combo.name == name:
                 if updated.name != name and self.get_by_name(updated.name):
-                    raise ValueError(
-                        f"A combo named '{updated.name}' already exists."
-                    )
+                    raise ValueError(f"A combo named '{updated.name}' already exists.")
                 self._combos[i] = updated
                 return
         raise KeyError(f"Combo '{name}' not found.")
@@ -42,7 +39,7 @@ class ComboLibrary:
                 return
         raise KeyError(f"Combo '{name}' not found.")
 
-    def list_all(self) -> List[Combo]:
+    def list_all(self) -> list[Combo]:
         return list(self._combos)
 
     def __len__(self) -> int:
@@ -61,10 +58,10 @@ class ComboLibrary:
 
 class FootworkMoveLibrary:
     def __init__(self) -> None:
-        self._moves: List[FootworkMove] = []
+        self._moves: list[FootworkMove] = []
 
     @property
-    def moves(self) -> List[FootworkMove]:
+    def moves(self) -> list[FootworkMove]:
         return list(self._moves)
 
     def add(self, move: FootworkMove) -> None:
@@ -72,7 +69,7 @@ class FootworkMoveLibrary:
             raise ValueError(f"A move named '{move.name}' already exists.")
         self._moves.append(move)
 
-    def get_by_name(self, name: str) -> Optional[FootworkMove]:
+    def get_by_name(self, name: str) -> FootworkMove | None:
         for move in self._moves:
             if move.name == name:
                 return move
@@ -82,9 +79,7 @@ class FootworkMoveLibrary:
         for i, move in enumerate(self._moves):
             if move.name == name:
                 if updated.name != name and self.get_by_name(updated.name):
-                    raise ValueError(
-                        f"A move named '{updated.name}' already exists."
-                    )
+                    raise ValueError(f"A move named '{updated.name}' already exists.")
                 self._moves[i] = updated
                 return
         raise KeyError(f"Move '{name}' not found.")
@@ -96,7 +91,7 @@ class FootworkMoveLibrary:
                 return
         raise KeyError(f"Move '{name}' not found.")
 
-    def list_all(self) -> List[FootworkMove]:
+    def list_all(self) -> list[FootworkMove]:
         return list(self._moves)
 
     def __len__(self) -> int:
@@ -115,20 +110,18 @@ class FootworkMoveLibrary:
 
 class CustomWorkoutLibrary:
     def __init__(self) -> None:
-        self._workouts: List[CustomWorkout] = []
+        self._workouts: list[CustomWorkout] = []
 
     @property
-    def workouts(self) -> List[CustomWorkout]:
+    def workouts(self) -> list[CustomWorkout]:
         return list(self._workouts)
 
     def add(self, workout: CustomWorkout) -> None:
         if any(w.name == workout.name for w in self._workouts):
-            raise ValueError(
-                f"A workout named '{workout.name}' already exists."
-            )
+            raise ValueError(f"A workout named '{workout.name}' already exists.")
         self._workouts.append(workout)
 
-    def get_by_name(self, name: str) -> Optional[CustomWorkout]:
+    def get_by_name(self, name: str) -> CustomWorkout | None:
         for workout in self._workouts:
             if workout.name == name:
                 return workout
@@ -152,7 +145,7 @@ class CustomWorkoutLibrary:
                 return
         raise KeyError(f"Workout '{name}' not found.")
 
-    def list_all(self) -> List[CustomWorkout]:
+    def list_all(self) -> list[CustomWorkout]:
         return list(self._workouts)
 
     def __len__(self) -> int:

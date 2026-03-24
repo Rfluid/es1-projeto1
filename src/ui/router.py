@@ -1,4 +1,4 @@
-from typing import Callable, Dict
+from collections.abc import Callable
 
 from .page import Page
 
@@ -13,7 +13,7 @@ class Router:
     """
 
     def __init__(self, container_id: str = "app") -> None:
-        self._routes: Dict[str, PageFactory] = {}
+        self._routes: dict[str, PageFactory] = {}
         self._container_id = container_id
         self._current_page: Page | None = None
         self._proxy = None

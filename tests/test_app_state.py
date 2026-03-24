@@ -1,12 +1,10 @@
 import json
 
-import pytest
-
 from src.domain.combo import Combo
-from src.domain.footwork_move import FootworkMove
 from src.domain.custom_workout import CustomWorkout
+from src.domain.footwork_move import FootworkMove
+from src.persistence.app_state import APP_STATE_KEY, AppState
 from src.persistence.storage_manager import StorageManager
-from src.persistence.app_state import AppState, APP_STATE_KEY
 from tests.fake_storage import FakeStorageBackend
 
 

@@ -2,6 +2,7 @@ import random
 
 from src.domain.call_mode import CallMode
 from src.domain.drill_config import ComboDrillConfig
+
 from .drill_session import DrillSession
 from .events import DrillEvent, EventType
 

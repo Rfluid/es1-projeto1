@@ -1,6 +1,7 @@
 import random
 
 from src.domain.drill_config import TimingDrillConfig
+
 from .drill_session import DrillSession
 from .events import DrillEvent, EventType
 

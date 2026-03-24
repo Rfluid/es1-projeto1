@@ -1,8 +1,8 @@
 from src.domain.drill_config import RoundTimerConfig
-from src.session.round_timer_session import RoundTimerSession
 from src.session.events import DrillEvent, EventType
-from src.ui.page import Page
+from src.session.round_timer_session import RoundTimerSession
 from src.ui.drill_timer import DrillTimer
+from src.ui.page import Page
 
 
 def _fmt_time(seconds: int) -> str:
@@ -56,8 +56,8 @@ class RoundTimerPage(Page):
         """
 
     def mount(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         p = create_proxy(lambda e: self.ctx.router.navigate("#/"))
         document.getElementById("btn-back").addEventListener("click", p)
@@ -158,7 +158,11 @@ class RoundTimerPage(Page):
         )
         phase = self._session.phase
         badge = document.getElementById("phase-badge")
-        badge.textContent = t("round_timer.phase_work") if phase == "work" else t("round_timer.phase_rest")
+        badge.textContent = (
+            t("round_timer.phase_work")
+            if phase == "work"
+            else t("round_timer.phase_rest")
+        )
         badge.className = f"phase-badge phase-{phase}"
 
     def _show_config(self) -> None:

@@ -41,7 +41,9 @@ class TestI18nTranslation:
 
     def test_home_page_strings_pt(self):
         i18n = I18n(locale="pt")
-        assert i18n.t("home.subtitle") == "Plataforma de Treinamento para Artes Marciais"
+        assert (
+            i18n.t("home.subtitle") == "Plataforma de Treinamento para Artes Marciais"
+        )
         assert i18n.t("home.drills_heading") == "Modalidades de Treino"
         assert i18n.t("home.manage_heading") == "Gerenciamento"
 
@@ -107,4 +109,6 @@ class TestI18nAllKeysConsistent:
 
         pt_keys = set(_TRANSLATIONS["pt"].keys())
         en_keys = set(_TRANSLATIONS["en"].keys())
-        assert pt_keys == en_keys, f"Missing in pt: {en_keys - pt_keys}, missing in en: {pt_keys - en_keys}"
+        assert pt_keys == en_keys, (
+            f"Missing in pt: {en_keys - pt_keys}, missing in en: {pt_keys - en_keys}"
+        )

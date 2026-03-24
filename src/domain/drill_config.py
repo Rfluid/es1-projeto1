@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List
 
 from .call_mode import CallMode
 from .combo import Combo
@@ -93,7 +92,7 @@ class TimingDrillConfig(DrillConfig):
 
 @dataclass
 class ComboDrillConfig(DrillConfig):
-    combos: List[Combo] = field(default_factory=list)
+    combos: list[Combo] = field(default_factory=list)
     call_mode: CallMode = CallMode.SEQUENTIAL
     call_interval: int = 5  # seconds
     total_duration: int = 180  # seconds
@@ -127,7 +126,7 @@ class ComboDrillConfig(DrillConfig):
 
 @dataclass
 class FootworkDrillConfig(DrillConfig):
-    moves: List[FootworkMove] = field(default_factory=list)
+    moves: list[FootworkMove] = field(default_factory=list)
     min_interval: int = 2  # seconds
     max_interval: int = 5  # seconds
     total_duration: int = 180  # seconds

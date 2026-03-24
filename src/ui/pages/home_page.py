@@ -47,8 +47,8 @@ class HomePage(Page):
         """
 
     def mount(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         routes = {
             "nav-round-timer": "#/round-timer",

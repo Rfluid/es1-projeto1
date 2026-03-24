@@ -1,14 +1,13 @@
 import pytest
 
 from src.domain.combo import Combo
-from src.domain.footwork_move import FootworkMove
 from src.domain.custom_workout import CustomWorkout
+from src.domain.footwork_move import FootworkMove
 from src.domain.libraries import (
     ComboLibrary,
-    FootworkMoveLibrary,
     CustomWorkoutLibrary,
+    FootworkMoveLibrary,
 )
-
 
 # --- ComboLibrary ---
 

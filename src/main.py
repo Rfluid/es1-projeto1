@@ -35,7 +35,11 @@ announcer = Announcer(WebSpeechBackend(lang=i18n.speech_lang))
 
 router = Router("app")
 ctx = AppContext(
-    app_state=app_state, audio_engine=audio_engine, announcer=announcer, i18n=i18n, router=router
+    app_state=app_state,
+    audio_engine=audio_engine,
+    announcer=announcer,
+    i18n=i18n,
+    router=router,
 )
 
 # --- Set HTML lang ---
@@ -60,8 +64,6 @@ router.register("/custom-workouts", lambda: CustomWorkoutPage(ctx))
 if not loaded and app_state.load_error:
     from js import window  # type: ignore[import-not-found]
 
-    window.alert(
-        f"{i18n.t('alert.corrupt_data')}\n\n{app_state.load_error}"
-    )
+    window.alert(f"{i18n.t('alert.corrupt_data')}\n\n{app_state.load_error}")
 
 router.start()

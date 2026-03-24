@@ -1,25 +1,30 @@
 """Tests for Page.render() output — verifies HTML structure without a browser."""
 
-import pytest
 
 from src.domain.combo import Combo
-from src.domain.footwork_move import FootworkMove
 from src.domain.custom_workout import CustomWorkout
+from src.domain.footwork_move import FootworkMove
 from src.i18n import I18n
-from src.persistence.storage_manager import StorageManager
 from src.persistence.app_state import AppState
+from src.persistence.storage_manager import StorageManager
 from src.ui.app_context import AppContext
 from tests.fake_storage import FakeStorageBackend
 
 
 class FakeAudioEngine:
-    def play_start_signal(self): pass
-    def play_warning_signal(self): pass
-    def play_end_signal(self): pass
+    def play_start_signal(self):
+        pass
+
+    def play_warning_signal(self):
+        pass
+
+    def play_end_signal(self):
+        pass
 
 
 class FakeAnnouncer:
-    def announce(self, text): pass
+    def announce(self, text):
+        pass
 
 
 def _make_ctx(locale: str = "pt") -> AppContext:

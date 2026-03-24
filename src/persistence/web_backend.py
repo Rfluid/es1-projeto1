@@ -4,13 +4,12 @@ Only importable inside a PyScript environment.
 Implements the StorageBackend protocol.
 """
 
-from typing import Optional
 
 
 class LocalStorageBackend:
     """StorageBackend implementation using browser localStorage."""
 
-    def get_item(self, key: str) -> Optional[str]:
+    def get_item(self, key: str) -> str | None:
         from js import window  # type: ignore[import-not-found]
 
         value = window.localStorage.getItem(key)

@@ -1,6 +1,7 @@
 from enum import Enum
 
 from src.domain.drill_config import RoundTimerConfig
+
 from .drill_session import DrillSession
 from .events import DrillEvent, EventType
 

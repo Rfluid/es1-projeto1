@@ -12,7 +12,11 @@ class CustomWorkoutPage(Page):
         workouts = self.ctx.app_state.workout_library.list_all()
         rows = ""
         for w in workouts:
-            desc = f"<span class='item-desc'>{w.description}</span>" if w.description else ""
+            desc = (
+                f"<span class='item-desc'>{w.description}</span>"
+                if w.description
+                else ""
+            )
             rows += f"""
             <div class="library-item" data-name="{w.name}">
                 <div class="item-info">
@@ -26,7 +30,11 @@ class CustomWorkoutPage(Page):
             </div>
             """
 
-        empty_msg = f'<p class="empty-msg">{t("custom_workout.empty")}</p>' if not workouts else ""
+        empty_msg = (
+            f'<p class="empty-msg">{t("custom_workout.empty")}</p>'
+            if not workouts
+            else ""
+        )
 
         return f"""
         <div class="page-header">
@@ -55,8 +63,8 @@ class CustomWorkoutPage(Page):
         """
 
     def mount(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         p = create_proxy(lambda e: self.ctx.router.navigate("#/"))
         document.getElementById("btn-back").addEventListener("click", p)
@@ -73,8 +81,8 @@ class CustomWorkoutPage(Page):
             p.destroy()
 
     def _bind_delete_buttons(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         for btn in document.querySelectorAll(".btn-delete"):
             name = btn.getAttribute("data-name")
@@ -90,7 +98,9 @@ class CustomWorkoutPage(Page):
         desc = document.getElementById("in-desc").value.strip()
 
         try:
-            workout = CustomWorkout(name=name, duration=int(duration_str), description=desc)
+            workout = CustomWorkout(
+                name=name, duration=int(duration_str), description=desc
+            )
             self.ctx.app_state.workout_library.add(workout)
             self.ctx.app_state.save()
         except (ValueError, TypeError) as e:

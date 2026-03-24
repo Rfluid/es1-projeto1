@@ -1,10 +1,9 @@
 from src.domain.call_mode import CallMode
-from src.domain.combo import Combo
 from src.domain.drill_config import ComboDrillConfig
 from src.session.combo_drill_session import ComboDrillSession
 from src.session.events import DrillEvent, EventType
-from src.ui.page import Page
 from src.ui.drill_timer import DrillTimer
+from src.ui.page import Page
 
 
 def _fmt_time(seconds: int) -> str:
@@ -85,8 +84,8 @@ class ComboDrillPage(Page):
         """
 
     def mount(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         p = create_proxy(lambda e: self.ctx.router.navigate("#/"))
         document.getElementById("btn-back").addEventListener("click", p)
@@ -174,7 +173,9 @@ class ComboDrillPage(Page):
             self.ctx.audio_engine.play_start_signal()
             self.ctx.announcer.announce(event.data["combo_name"])
             document.getElementById("combo-name").textContent = event.data["combo_name"]
-            document.getElementById("combo-sequence").textContent = event.data["combo_sequence"]
+            document.getElementById("combo-sequence").textContent = event.data[
+                "combo_sequence"
+            ]
         elif event.event_type == EventType.SESSION_END:
             self.ctx.audio_engine.play_end_signal()
             self.ctx.announcer.announce(self.ctx.i18n.t("voice.session_end"))

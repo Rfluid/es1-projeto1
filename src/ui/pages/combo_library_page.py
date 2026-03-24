@@ -24,7 +24,9 @@ class ComboLibraryPage(Page):
             </div>
             """
 
-        empty_msg = f'<p class="empty-msg">{t("combo_library.empty")}</p>' if not combos else ""
+        empty_msg = (
+            f'<p class="empty-msg">{t("combo_library.empty")}</p>' if not combos else ""
+        )
 
         return f"""
         <div class="page-header">
@@ -50,8 +52,8 @@ class ComboLibraryPage(Page):
         """
 
     def mount(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         p = create_proxy(lambda e: self.ctx.router.navigate("#/"))
         document.getElementById("btn-back").addEventListener("click", p)
@@ -68,8 +70,8 @@ class ComboLibraryPage(Page):
             p.destroy()
 
     def _bind_delete_buttons(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         for btn in document.querySelectorAll(".btn-delete"):
             name = btn.getAttribute("data-name")

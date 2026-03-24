@@ -1,4 +1,3 @@
-from typing import Optional
 
 
 class FakeStorageBackend:
@@ -7,7 +6,7 @@ class FakeStorageBackend:
     def __init__(self) -> None:
         self._data: dict[str, str] = {}
 
-    def get_item(self, key: str) -> Optional[str]:
+    def get_item(self, key: str) -> str | None:
         return self._data.get(key)
 
     def set_item(self, key: str, value: str) -> None:

@@ -23,7 +23,9 @@ class FootworkMovePage(Page):
             </div>
             """
 
-        empty_msg = f'<p class="empty-msg">{t("footwork_move.empty")}</p>' if not moves else ""
+        empty_msg = (
+            f'<p class="empty-msg">{t("footwork_move.empty")}</p>' if not moves else ""
+        )
 
         return f"""
         <div class="page-header">
@@ -46,8 +48,8 @@ class FootworkMovePage(Page):
         """
 
     def mount(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         p = create_proxy(lambda e: self.ctx.router.navigate("#/"))
         document.getElementById("btn-back").addEventListener("click", p)
@@ -64,8 +66,8 @@ class FootworkMovePage(Page):
             p.destroy()
 
     def _bind_delete_buttons(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         for btn in document.querySelectorAll(".btn-delete"):
             name = btn.getAttribute("data-name")

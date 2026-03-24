@@ -113,7 +113,9 @@ class TestRoundTimerSessionWorkPhase:
 class TestRoundTimerSessionFullCycle:
     def test_two_rounds_full_sequence(self):
         # 2 rounds, work=2s, rest=1s, warning=1s
-        s = RoundTimerSession(_cfg(num_rounds=2, work_duration=2, rest_duration=1, warning_time=1))
+        s = RoundTimerSession(
+            _cfg(num_rounds=2, work_duration=2, rest_duration=1, warning_time=1)
+        )
         events = _collect(s)
         s.start()  # ROUND_START(1)
 
@@ -127,19 +129,21 @@ class TestRoundTimerSessionFullCycle:
 
         types = [e.event_type for e in events]
         assert types == [
-            EventType.ROUND_START,    # round 1
+            EventType.ROUND_START,  # round 1
             EventType.ROUND_WARNING,  # round 1
-            EventType.ROUND_END,      # round 1
-            EventType.REST_END,       # between rounds
-            EventType.ROUND_START,    # round 2
+            EventType.ROUND_END,  # round 1
+            EventType.REST_END,  # between rounds
+            EventType.ROUND_START,  # round 2
             EventType.ROUND_WARNING,  # round 2
-            EventType.ROUND_END,      # round 2
+            EventType.ROUND_END,  # round 2
             EventType.SESSION_END,
         ]
         assert s.is_finished is True
 
     def test_single_round_no_rest(self):
-        s = RoundTimerSession(_cfg(num_rounds=1, work_duration=2, rest_duration=0, warning_time=0))
+        s = RoundTimerSession(
+            _cfg(num_rounds=1, work_duration=2, rest_duration=0, warning_time=0)
+        )
         events = _collect(s)
         s.start()
         _run_ticks(s, 2)
@@ -152,7 +156,9 @@ class TestRoundTimerSessionFullCycle:
         ]
 
     def test_zero_rest_skips_directly_to_next_round(self):
-        s = RoundTimerSession(_cfg(num_rounds=2, work_duration=1, rest_duration=0, warning_time=0))
+        s = RoundTimerSession(
+            _cfg(num_rounds=2, work_duration=1, rest_duration=0, warning_time=0)
+        )
         events = _collect(s)
         s.start()
 
@@ -161,10 +167,10 @@ class TestRoundTimerSessionFullCycle:
 
         types = [e.event_type for e in events]
         assert types == [
-            EventType.ROUND_START,   # round 1
-            EventType.ROUND_END,     # round 1
-            EventType.ROUND_START,   # round 2
-            EventType.ROUND_END,     # round 2
+            EventType.ROUND_START,  # round 1
+            EventType.ROUND_END,  # round 1
+            EventType.ROUND_START,  # round 2
+            EventType.ROUND_END,  # round 2
             EventType.SESSION_END,
         ]
 
@@ -183,7 +189,9 @@ class TestRoundTimerSessionFullCycle:
         assert s.phase_remaining == 2
 
     def test_current_round_tracks_correctly(self):
-        s = RoundTimerSession(_cfg(num_rounds=3, work_duration=1, rest_duration=1, warning_time=0))
+        s = RoundTimerSession(
+            _cfg(num_rounds=3, work_duration=1, rest_duration=1, warning_time=0)
+        )
         s.start()
         assert s.current_round == 1
 
@@ -199,4 +207,8 @@ class TestRoundTimerSessionFullCycle:
 class TestRoundTimerSessionValidation:
     def test_invalid_config_raises_on_init(self):
         with pytest.raises(ValueError):
-            RoundTimerSession(RoundTimerConfig(num_rounds=0, work_duration=3, rest_duration=1, warning_time=1))
+            RoundTimerSession(
+                RoundTimerConfig(
+                    num_rounds=0, work_duration=3, rest_duration=1, warning_time=1
+                )
+            )

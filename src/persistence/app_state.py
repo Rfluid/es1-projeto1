@@ -1,10 +1,11 @@
-from typing import Any, Optional
+from typing import Any
 
 from src.domain.libraries import (
     ComboLibrary,
-    FootworkMoveLibrary,
     CustomWorkoutLibrary,
+    FootworkMoveLibrary,
 )
+
 from .storage_manager import StorageManager
 
 APP_STATE_KEY = "fightdrill_state"
@@ -22,10 +23,10 @@ class AppState:
         self.combo_library = ComboLibrary()
         self.footwork_library = FootworkMoveLibrary()
         self.workout_library = CustomWorkoutLibrary()
-        self._load_error: Optional[str] = None
+        self._load_error: str | None = None
 
     @property
-    def load_error(self) -> Optional[str]:
+    def load_error(self) -> str | None:
         return self._load_error
 
     def to_dict(self) -> dict:

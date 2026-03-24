@@ -1,8 +1,8 @@
 from src.domain.drill_config import FootworkDrillConfig
-from src.session.footwork_drill_session import FootworkDrillSession
 from src.session.events import DrillEvent, EventType
-from src.ui.page import Page
+from src.session.footwork_drill_session import FootworkDrillSession
 from src.ui.drill_timer import DrillTimer
+from src.ui.page import Page
 
 
 def _fmt_time(seconds: int) -> str:
@@ -77,8 +77,8 @@ class FootworkDrillPage(Page):
         """
 
     def mount(self) -> None:
-        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
         from js import document  # type: ignore[import-not-found]
+        from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
         p = create_proxy(lambda e: self.ctx.router.navigate("#/"))
         document.getElementById("btn-back").addEventListener("click", p)

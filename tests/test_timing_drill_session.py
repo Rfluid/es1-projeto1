@@ -8,7 +8,9 @@ from src.session.timing_drill_session import TimingDrillSession
 
 
 def _cfg(**overrides) -> TimingDrillConfig:
-    defaults = dict(total_duration=10, min_interval=2, max_interval=4, target_technique="jab")
+    defaults = dict(
+        total_duration=10, min_interval=2, max_interval=4, target_technique="jab"
+    )
     defaults.update(overrides)
     return TimingDrillConfig(**defaults)
 
@@ -38,7 +40,9 @@ class TestTimingDrillSession:
 
     def test_stimuli_emitted_with_technique(self):
         rng = random.Random(42)
-        s = TimingDrillSession(_cfg(total_duration=20, target_technique="teep"), rng=rng)
+        s = TimingDrillSession(
+            _cfg(total_duration=20, target_technique="teep"), rng=rng
+        )
         events = _collect(s)
         s.start()
         _run_ticks(s, 20)
@@ -90,7 +94,7 @@ class TestTimingDrillSession:
         end_idx = next(
             i for i, e in enumerate(events) if e.event_type == EventType.SESSION_END
         )
-        after_end = events[end_idx + 1:] if end_idx + 1 < len(events) else []
+        after_end = events[end_idx + 1 :] if end_idx + 1 < len(events) else []
         assert all(e.event_type != EventType.STIMULUS for e in after_end)
 
     def test_pause_prevents_progress(self):

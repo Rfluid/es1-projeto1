@@ -1,5 +1,5 @@
 import json
-from typing import Any, Optional, Protocol
+from typing import Any, Protocol
 
 
 class StorageBackend(Protocol):
@@ -9,7 +9,7 @@ class StorageBackend(Protocol):
     In tests this is replaced by a dict-based fake.
     """
 
-    def get_item(self, key: str) -> Optional[str]: ...
+    def get_item(self, key: str) -> str | None: ...
 
     def set_item(self, key: str, value: str) -> None: ...
 
@@ -26,7 +26,7 @@ class StorageManager:
         serialized = json.dumps(data, ensure_ascii=False)
         self._backend.set_item(key, serialized)
 
-    def load(self, key: str) -> Optional[Any]:
+    def load(self, key: str) -> Any | None:
         """Load and deserialize JSON from storage.
 
         Returns None if key does not exist.

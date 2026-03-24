@@ -2,21 +2,22 @@ import pytest
 
 from src.domain.call_mode import CallMode
 from src.domain.combo import Combo
-from src.domain.footwork_move import FootworkMove
 from src.domain.drill_config import (
-    RoundTimerConfig,
-    TimingDrillConfig,
     ComboDrillConfig,
     FootworkDrillConfig,
+    RoundTimerConfig,
+    TimingDrillConfig,
 )
-
+from src.domain.footwork_move import FootworkMove
 
 # --- RoundTimerConfig ---
 
 
 class TestRoundTimerConfig:
     def _valid(self, **overrides) -> RoundTimerConfig:
-        defaults = dict(num_rounds=3, work_duration=180, rest_duration=60, warning_time=10)
+        defaults = dict(
+            num_rounds=3, work_duration=180, rest_duration=60, warning_time=10
+        )
         defaults.update(overrides)
         return RoundTimerConfig(**defaults)
 
