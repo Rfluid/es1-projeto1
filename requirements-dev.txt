@@ -1,0 +1,7 @@
+# Include the main requirements
+-r requirements.txt
+
+# Development-specific tools
+pip-tools
+pipdeptree
+pytest
