@@ -29,15 +29,20 @@ test-k: install-dev ## Run tests matching pattern: make test-k K=<pattern>
 
 build: ## Generate pyscript.toml with file mappings
 	@echo '[files]' > pyscript.toml
-	@find src -name '*.py' ! -path '*__pycache__*' | sort | while read f; do \
+	@find src -name '*.py' ! -path '*__pycache__*' | sort -u | while read f; do \
 		echo "\"./$$f\" = \"./$$f\""; \
 	done >> pyscript.toml
 	@echo "[build] pyscript.toml updated"
 	@$(MAKE) --no-print-directory validate
 
 validate: ## Validate pyscript.toml for TOML syntax errors (duplicate keys, etc.)
-	@python3 -c "import tomllib, sys; tomllib.load(open('pyscript.toml','rb')); print('[validate] pyscript.toml OK')" \
-		|| (echo '[validate] pyscript.toml INVALID'; exit 1)
+	@dupes=$$(grep -E '^"' pyscript.toml | sort | uniq -d); \
+	if [ -n "$$dupes" ]; then \
+		echo '[validate] pyscript.toml INVALID - duplicate keys:'; \
+		echo "$$dupes"; \
+		exit 1; \
+	fi
+	@echo '[validate] pyscript.toml OK'
 
 serve: build ## Build and serve the app at http://localhost:8000
 	python3 -m http.server 8000
