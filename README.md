@@ -14,12 +14,19 @@ Desenvolvido como projeto da disciplina de Engenharia de Software I — UFSC, 20
 ## Estrutura do projeto
 
 ```
+index.html             # Página principal (PyScript + CSS)
+pyscript.toml          # Configuração PyScript
 src/
-  domain/          # Modelo de domínio (classes de negócio)
-  audio/           # Motor de áudio (Web Audio API + Speech Synthesis)
-tests/             # Testes unitários (pytest)
-docs/              # Documentação e plano de implementação
-statement/         # Enunciado do projeto
+  main.py              # Entry point (bootstrap da aplicação)
+  domain/              # Modelo de domínio (classes de negócio)
+  audio/               # Motor de áudio (Web Audio API + Speech Synthesis)
+  persistence/         # Camada de persistência (localStorage)
+  session/             # Lógica de execução dos treinos (state machines)
+  ui/                  # Interface do usuário (Router, Pages, DrillTimer)
+    pages/             # Páginas da aplicação (Home, Drills, CRUD)
+tests/                 # Testes unitários (pytest)
+docs/                  # Documentação e plano de implementação
+statement/             # Enunciado do projeto
 ```
 
 ## Setup
