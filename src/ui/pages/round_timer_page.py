@@ -18,26 +18,27 @@ class RoundTimerPage(Page):
         self._proxies = []
 
     def render(self) -> str:
-        return """
+        t = self.ctx.i18n.t
+        return f"""
         <div class="page-header">
-            <button class="btn-back" id="btn-back">&#8592; Voltar</button>
-            <h1>Round Timer</h1>
+            <button class="btn-back" id="btn-back">&#8592; {t("back")}</button>
+            <h1>{t("round_timer.title")}</h1>
         </div>
 
         <div id="config-section" class="config-form">
-            <label>Rounds
+            <label>{t("round_timer.rounds")}
                 <input type="number" id="in-rounds" value="3" min="1">
             </label>
-            <label>Trabalho (s)
+            <label>{t("round_timer.work_s")}
                 <input type="number" id="in-work" value="180" min="1">
             </label>
-            <label>Descanso (s)
+            <label>{t("round_timer.rest_s")}
                 <input type="number" id="in-rest" value="60" min="0">
             </label>
-            <label>Aviso antes do fim (s)
+            <label>{t("round_timer.warning_s")}
                 <input type="number" id="in-warning" value="10" min="0">
             </label>
-            <button class="btn-primary" id="btn-start">Iniciar</button>
+            <button class="btn-primary" id="btn-start">{t("start")}</button>
             <p id="config-error" class="error-msg"></p>
         </div>
 
@@ -48,8 +49,8 @@ class RoundTimerPage(Page):
                 <span class="phase-badge" id="phase-badge">-</span>
             </div>
             <div class="timer-controls">
-                <button class="btn-secondary" id="btn-pause">Pausar</button>
-                <button class="btn-danger" id="btn-stop">Parar</button>
+                <button class="btn-secondary" id="btn-pause">{t("pause")}</button>
+                <button class="btn-danger" id="btn-stop">{t("stop")}</button>
             </div>
         </div>
         """
@@ -107,14 +108,15 @@ class RoundTimerPage(Page):
     def _on_pause(self) -> None:
         from js import document  # type: ignore[import-not-found]
 
+        t = self.ctx.i18n.t
         if not self._timer or not self._session:
             return
         if self._session.is_paused:
             self._timer.resume()
-            document.getElementById("btn-pause").textContent = "Pausar"
+            document.getElementById("btn-pause").textContent = t("pause")
         else:
             self._timer.pause()
-            document.getElementById("btn-pause").textContent = "Continuar"
+            document.getElementById("btn-pause").textContent = t("resume")
 
     def _on_stop(self) -> None:
         if self._timer:
@@ -122,28 +124,30 @@ class RoundTimerPage(Page):
         self._show_config()
 
     def _handle_event(self, event: DrillEvent) -> None:
+        t = self.ctx.i18n.t
         audio = self.ctx.audio_engine
         announce = self.ctx.announcer.announce
         if event.event_type == EventType.ROUND_START:
             audio.play_start_signal()
             round_num = event.data.get("round", "")
-            announce(f"Round {round_num}, trabalho")
+            announce(t("voice.round_work", round=round_num))
         elif event.event_type == EventType.ROUND_WARNING:
             audio.play_warning_signal()
-            announce("Atenção")
+            announce(t("voice.warning"))
         elif event.event_type == EventType.ROUND_END:
             audio.play_end_signal()
-            announce("Descanso")
+            announce(t("voice.rest"))
         elif event.event_type == EventType.REST_END:
             audio.play_end_signal()
         elif event.event_type == EventType.SESSION_END:
             audio.play_end_signal()
-            announce("Fim do treino")
+            announce(t("voice.session_end"))
             self._show_config()
 
     def _update_display(self) -> None:
         from js import document  # type: ignore[import-not-found]
 
+        t = self.ctx.i18n.t
         if not self._session:
             return
         document.getElementById("timer-display").textContent = _fmt_time(
@@ -154,7 +158,7 @@ class RoundTimerPage(Page):
         )
         phase = self._session.phase
         badge = document.getElementById("phase-badge")
-        badge.textContent = "TRABALHO" if phase == "work" else "DESCANSO"
+        badge.textContent = t("round_timer.phase_work") if phase == "work" else t("round_timer.phase_rest")
         badge.className = f"phase-badge phase-{phase}"
 
     def _show_config(self) -> None:

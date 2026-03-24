@@ -18,26 +18,27 @@ class TimingDrillPage(Page):
         self._proxies = []
 
     def render(self) -> str:
-        return """
+        t = self.ctx.i18n.t
+        return f"""
         <div class="page-header">
-            <button class="btn-back" id="btn-back">&#8592; Voltar</button>
-            <h1>Timing Drill</h1>
+            <button class="btn-back" id="btn-back">&#8592; {t("back")}</button>
+            <h1>{t("timing_drill.title")}</h1>
         </div>
 
         <div id="config-section" class="config-form">
-            <label>Duração total (s)
+            <label>{t("timing_drill.duration_s")}
                 <input type="number" id="in-duration" value="180" min="1">
             </label>
-            <label>Intervalo mínimo (s)
+            <label>{t("timing_drill.min_interval_s")}
                 <input type="number" id="in-min" value="2" min="1">
             </label>
-            <label>Intervalo máximo (s)
+            <label>{t("timing_drill.max_interval_s")}
                 <input type="number" id="in-max" value="8" min="1">
             </label>
-            <label>Técnica-alvo
-                <input type="text" id="in-technique" value="jab" placeholder="ex: jab, teep">
+            <label>{t("timing_drill.target_technique")}
+                <input type="text" id="in-technique" value="jab" placeholder="{t("timing_drill.target_placeholder")}">
             </label>
-            <button class="btn-primary" id="btn-start">Iniciar</button>
+            <button class="btn-primary" id="btn-start">{t("start")}</button>
             <p id="config-error" class="error-msg"></p>
         </div>
 
@@ -45,8 +46,8 @@ class TimingDrillPage(Page):
             <div class="timer-display" id="timer-display">00:00</div>
             <div class="stimulus-zone" id="stimulus-zone"></div>
             <div class="timer-controls">
-                <button class="btn-secondary" id="btn-pause">Pausar</button>
-                <button class="btn-danger" id="btn-stop">Parar</button>
+                <button class="btn-secondary" id="btn-pause">{t("pause")}</button>
+                <button class="btn-danger" id="btn-stop">{t("stop")}</button>
             </div>
         </div>
         """
@@ -104,14 +105,15 @@ class TimingDrillPage(Page):
     def _on_pause(self) -> None:
         from js import document  # type: ignore[import-not-found]
 
+        t = self.ctx.i18n.t
         if not self._timer or not self._session:
             return
         if self._session.is_paused:
             self._timer.resume()
-            document.getElementById("btn-pause").textContent = "Pausar"
+            document.getElementById("btn-pause").textContent = t("pause")
         else:
             self._timer.pause()
-            document.getElementById("btn-pause").textContent = "Continuar"
+            document.getElementById("btn-pause").textContent = t("resume")
 
     def _on_stop(self) -> None:
         if self._timer:
@@ -127,7 +129,6 @@ class TimingDrillPage(Page):
             zone = document.getElementById("stimulus-zone")
             zone.textContent = event.data["technique"].upper()
             zone.classList.add("stimulus-flash")
-            # Remove animation class after a short time to allow re-trigger
             from js import window  # type: ignore[import-not-found]
             from pyodide.ffi import create_proxy  # type: ignore[import-not-found]
 
@@ -138,7 +139,7 @@ class TimingDrillPage(Page):
             window.setTimeout(p, 500)
         elif event.event_type == EventType.SESSION_END:
             self.ctx.audio_engine.play_end_signal()
-            self.ctx.announcer.announce("Fim do treino")
+            self.ctx.announcer.announce(self.ctx.i18n.t("voice.session_end"))
             self._show_config()
 
     def _update_display(self) -> None:

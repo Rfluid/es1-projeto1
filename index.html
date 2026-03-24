@@ -243,9 +243,17 @@
 </head>
 <body>
     <div id="app">
-        <div id="loading">Carregando FightDrill...</div>
+        <div id="loading"></div>
     </div>
 
+    <script>
+        // Set loading text and html lang based on browser locale
+        (function() {
+            var isPt = navigator.language && navigator.language.startsWith('pt');
+            document.getElementById('loading').textContent = isPt ? 'Carregando FightDrill...' : 'Loading FightDrill...';
+            document.documentElement.lang = isPt ? 'pt-BR' : 'en-US';
+        })();
+    </script>
     <script type="py" src="./src/main.py" config="./pyscript.toml"></script>
 </body>
 </html>

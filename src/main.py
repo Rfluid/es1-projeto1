@@ -3,6 +3,7 @@
 from src.audio.announcer import Announcer
 from src.audio.audio_engine import AudioEngine
 from src.audio.web_backends import WebAudioPlayer, WebSpeechBackend
+from src.i18n import I18n
 from src.persistence.app_state import AppState
 from src.persistence.storage_manager import StorageManager
 from src.persistence.web_backend import LocalStorageBackend
@@ -19,6 +20,10 @@ from src.ui.pages import (
 )
 from src.ui.router import Router
 
+# --- i18n ---
+
+i18n = I18n()
+
 # --- Bootstrap ---
 
 storage = StorageManager(LocalStorageBackend())
@@ -26,12 +31,18 @@ app_state = AppState(storage)
 loaded = app_state.load()
 
 audio_engine = AudioEngine(WebAudioPlayer())
-announcer = Announcer(WebSpeechBackend())
+announcer = Announcer(WebSpeechBackend(lang=i18n.speech_lang))
 
 router = Router("app")
 ctx = AppContext(
-    app_state=app_state, audio_engine=audio_engine, announcer=announcer, router=router
+    app_state=app_state, audio_engine=audio_engine, announcer=announcer, i18n=i18n, router=router
 )
+
+# --- Set HTML lang ---
+
+from js import document as js_doc  # type: ignore[import-not-found]
+
+js_doc.documentElement.lang = i18n.speech_lang
 
 # --- Routes ---
 
@@ -50,7 +61,7 @@ if not loaded and app_state.load_error:
     from js import window  # type: ignore[import-not-found]
 
     window.alert(
-        f"Dados corrompidos no localStorage. Estado resetado.\n\n{app_state.load_error}"
+        f"{i18n.t('alert.corrupt_data')}\n\n{app_state.load_error}"
     )
 
 router.start()

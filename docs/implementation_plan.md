@@ -156,6 +156,61 @@ Objetivo: implementar calendário semanal, exportação/importação por URL (**
 
 ---
 
+## Fase 7 — Internacionalização (i18n): Português e Inglês
+
+Objetivo: suportar português (pt-BR) e inglês (en), detectando o idioma padrão do navegador. Todas as strings visíveis ao usuário e anúncios por voz devem ser traduzidas.
+
+### Infraestrutura i18n
+
+- [x] **Classe `I18n`** — gerenciador de traduções. `src/i18n.py`
+    - [x] Dicionário de traduções por locale (`pt` e `en`), mapeando chaves a strings.
+    - [x] Método `t(key: str, **kwargs) -> str` — retorna a string traduzida, com suporte a interpolação (ex.: `t("round_start", round=3)` → `"Round 3, trabalho"`).
+    - [x] Método `detect_locale() -> str` — lê `navigator.language` do navegador; retorna `"pt"` se começar com `"pt"`, senão `"en"`.
+    - [x] Propriedade `locale` — idioma ativo, inicializado via `detect_locale()`.
+- [x] **Registrar `I18n` no `AppContext`** — disponibilizar a instância para todas as páginas.
+- [x] Testes unitários para `I18n.t()` com ambos os locales, interpolação, chave inexistente (fallback para inglês).
+
+### Dicionário de traduções
+
+- [x] **Strings da UI (labels, botões, títulos)** — todas as strings hardcoded nas páginas. Inclui:
+    - [x] Títulos das páginas (ex.: "Round Timer", "Biblioteca de Combos").
+    - [x] Botões: "Voltar", "Iniciar", "Pausar", "Continuar", "Parar", "Adicionar", "Excluir".
+    - [x] Labels de formulário: "Rounds", "Trabalho (s)", "Descanso (s)", etc.
+    - [x] Mensagens de estado vazio: "Nenhum combo cadastrado", etc.
+    - [x] Textos da Home Page: título, subtítulo, descrições dos cards.
+- [x] **Strings de anúncio por voz (Announcer)** — frases faladas durante treinos:
+    - [x] "Round N, trabalho" / "Round N, work"
+    - [x] "Atenção" / "Warning"
+    - [x] "Descanso" / "Rest"
+    - [x] "Fim do treino" / "Workout complete"
+- [x] **Mensagens de erro e validação:**
+    - [x] "Dados corrompidos no localStorage..." (alert no main.py).
+    - [x] Mensagens de `ValueError` exibidas ao usuário (considerar traduzir apenas no nível da UI, não no domínio).
+
+### Migração das páginas
+
+- [x] **Substituir strings hardcoded por chamadas `ctx.i18n.t(...)`** em todas as 8 páginas:
+    - [x] `home_page.py`
+    - [x] `round_timer_page.py`
+    - [x] `timing_drill_page.py`
+    - [x] `combo_drill_page.py`
+    - [x] `footwork_drill_page.py`
+    - [x] `combo_library_page.py`
+    - [x] `footwork_move_page.py`
+    - [x] `custom_workout_page.py`
+- [x] **Substituir strings hardcoded nos `_handle_event`** (anúncios por voz) por `ctx.i18n.t(...)`.
+- [x] **Atualizar `index.html`** — traduzir o texto de carregamento ("Carregando FightDrill...").
+- [x] **Configurar `lang` do `<html>`** dinamicamente conforme o locale detectado.
+- [x] **Configurar `WebSpeechBackend.lang`** conforme o locale detectado (para pronúncia correta do TTS).
+
+### Testes
+
+- [x] Testes unitários: `I18n` com locale `pt` e `en`, interpolação, fallback (18 testes — `tests/test_i18n.py`).
+- [x] Testes de render das páginas: verificar que `render()` usa chaves i18n (testar com ambos os locales) (8 testes EN — `tests/test_pages_render.py`).
+- [ ] Testes manuais: alternar idioma do navegador e verificar UI + voz.
+
+---
+
 ## Referência: Rastreabilidade Fase × Requisito
 
 | Requisito | Fase    |

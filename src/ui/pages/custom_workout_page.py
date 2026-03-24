@@ -8,6 +8,7 @@ class CustomWorkoutPage(Page):
         self._proxies = []
 
     def render(self) -> str:
+        t = self.ctx.i18n.t
         workouts = self.ctx.app_state.workout_library.list_all()
         rows = ""
         for w in workouts:
@@ -20,30 +21,30 @@ class CustomWorkoutPage(Page):
                     {desc}
                 </div>
                 <div class="item-actions">
-                    <button class="btn-small btn-danger btn-delete" data-name="{w.name}">Excluir</button>
+                    <button class="btn-small btn-danger btn-delete" data-name="{w.name}">{t("delete")}</button>
                 </div>
             </div>
             """
 
-        empty_msg = '<p class="empty-msg">Nenhum treino personalizado cadastrado.</p>' if not workouts else ""
+        empty_msg = f'<p class="empty-msg">{t("custom_workout.empty")}</p>' if not workouts else ""
 
         return f"""
         <div class="page-header">
-            <button class="btn-back" id="btn-back">&#8592; Voltar</button>
-            <h1>Treinos Personalizados</h1>
+            <button class="btn-back" id="btn-back">&#8592; {t("back")}</button>
+            <h1>{t("custom_workout.title")}</h1>
         </div>
 
         <div class="config-form add-form">
-            <label>Nome
-                <input type="text" id="in-name" placeholder="ex: Shadow Boxing">
+            <label>{t("custom_workout.name")}
+                <input type="text" id="in-name" placeholder="{t("custom_workout.name_placeholder")}">
             </label>
-            <label>Duração (segundos)
+            <label>{t("custom_workout.duration_s")}
                 <input type="number" id="in-duration" value="300" min="1">
             </label>
-            <label>Descrição (opcional)
-                <textarea id="in-desc" rows="3" placeholder="Instruções, observações..."></textarea>
+            <label>{t("custom_workout.description")}
+                <textarea id="in-desc" rows="3" placeholder="{t("custom_workout.desc_placeholder")}"></textarea>
             </label>
-            <button class="btn-primary" id="btn-add">Adicionar</button>
+            <button class="btn-primary" id="btn-add">{t("add")}</button>
             <p id="form-error" class="error-msg"></p>
         </div>
 

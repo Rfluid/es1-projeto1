@@ -18,17 +18,18 @@ class FootworkDrillPage(Page):
         self._proxies = []
 
     def render(self) -> str:
+        t = self.ctx.i18n.t
         moves = self.ctx.app_state.footwork_library.list_all()
 
         if not moves:
-            return """
+            return f"""
             <div class="page-header">
-                <button class="btn-back" id="btn-back">&#8592; Voltar</button>
-                <h1>Footwork Drill</h1>
+                <button class="btn-back" id="btn-back">&#8592; {t("back")}</button>
+                <h1>{t("footwork_drill.title")}</h1>
             </div>
             <div class="empty-state">
-                <p>Nenhuma movimentação cadastrada.</p>
-                <button class="btn-primary" id="btn-go-moves">Ir para Movimentações</button>
+                <p>{t("footwork_drill.no_moves")}</p>
+                <button class="btn-primary" id="btn-go-moves">{t("footwork_drill.go_moves")}</button>
             </div>
             """
 
@@ -43,25 +44,25 @@ class FootworkDrillPage(Page):
 
         return f"""
         <div class="page-header">
-            <button class="btn-back" id="btn-back">&#8592; Voltar</button>
-            <h1>Footwork Drill</h1>
+            <button class="btn-back" id="btn-back">&#8592; {t("back")}</button>
+            <h1>{t("footwork_drill.title")}</h1>
         </div>
 
         <div id="config-section" class="config-form">
             <fieldset>
-                <legend>Selecione as movimentações</legend>
+                <legend>{t("footwork_drill.select_moves")}</legend>
                 {move_checkboxes}
             </fieldset>
-            <label>Intervalo mínimo (s)
+            <label>{t("footwork_drill.min_interval_s")}
                 <input type="number" id="in-min" value="2" min="1">
             </label>
-            <label>Intervalo máximo (s)
+            <label>{t("footwork_drill.max_interval_s")}
                 <input type="number" id="in-max" value="5" min="1">
             </label>
-            <label>Duração total (s)
+            <label>{t("footwork_drill.duration_s")}
                 <input type="number" id="in-duration" value="180" min="1">
             </label>
-            <button class="btn-primary" id="btn-start">Iniciar</button>
+            <button class="btn-primary" id="btn-start">{t("start")}</button>
             <p id="config-error" class="error-msg"></p>
         </div>
 
@@ -69,8 +70,8 @@ class FootworkDrillPage(Page):
             <div class="timer-display" id="timer-display">00:00</div>
             <div class="move-display" id="move-name">-</div>
             <div class="timer-controls">
-                <button class="btn-secondary" id="btn-pause">Pausar</button>
-                <button class="btn-danger" id="btn-stop">Parar</button>
+                <button class="btn-secondary" id="btn-pause">{t("pause")}</button>
+                <button class="btn-danger" id="btn-stop">{t("stop")}</button>
             </div>
         </div>
         """
@@ -142,14 +143,15 @@ class FootworkDrillPage(Page):
     def _on_pause(self) -> None:
         from js import document  # type: ignore[import-not-found]
 
+        t = self.ctx.i18n.t
         if not self._timer or not self._session:
             return
         if self._session.is_paused:
             self._timer.resume()
-            document.getElementById("btn-pause").textContent = "Pausar"
+            document.getElementById("btn-pause").textContent = t("pause")
         else:
             self._timer.pause()
-            document.getElementById("btn-pause").textContent = "Continuar"
+            document.getElementById("btn-pause").textContent = t("resume")
 
     def _on_stop(self) -> None:
         if self._timer:
@@ -165,7 +167,7 @@ class FootworkDrillPage(Page):
             document.getElementById("move-name").textContent = event.data["move_name"]
         elif event.event_type == EventType.SESSION_END:
             self.ctx.audio_engine.play_end_signal()
-            self.ctx.announcer.announce("Fim do treino")
+            self.ctx.announcer.announce(self.ctx.i18n.t("voice.session_end"))
             self._show_config()
 
     def _update_display(self) -> None:

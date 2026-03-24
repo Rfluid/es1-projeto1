@@ -1,8 +1,11 @@
 """Tests for Page.render() output — verifies HTML structure without a browser."""
 
+import pytest
+
 from src.domain.combo import Combo
 from src.domain.footwork_move import FootworkMove
 from src.domain.custom_workout import CustomWorkout
+from src.i18n import I18n
 from src.persistence.storage_manager import StorageManager
 from src.persistence.app_state import AppState
 from src.ui.app_context import AppContext
@@ -19,7 +22,7 @@ class FakeAnnouncer:
     def announce(self, text): pass
 
 
-def _make_ctx() -> AppContext:
+def _make_ctx(locale: str = "pt") -> AppContext:
     backend = FakeStorageBackend()
     storage = StorageManager(backend)
     app_state = AppState(storage)
@@ -27,6 +30,7 @@ def _make_ctx() -> AppContext:
         app_state=app_state,
         audio_engine=FakeAudioEngine(),
         announcer=FakeAnnouncer(),
+        i18n=I18n(locale=locale),
     )
 
 
@@ -180,3 +184,74 @@ class TestCustomWorkoutPageRender:
         assert "Shadow" in html
         assert "5min 0s" in html
         assert "3 rounds" in html
+
+
+# --- i18n locale tests: verify pages render with English locale ---
+
+
+class TestPagesRenderEnglish:
+    def test_home_page_en(self):
+        from src.ui.pages.home_page import HomePage
+
+        ctx = _make_ctx(locale="en")
+        html = HomePage(ctx).render()
+        assert "Martial Arts Training Platform" in html
+        assert "Training Drills" in html
+        assert "Management" in html
+
+    def test_round_timer_page_en(self):
+        from src.ui.pages.round_timer_page import RoundTimerPage
+
+        ctx = _make_ctx(locale="en")
+        html = RoundTimerPage(ctx).render()
+        assert "Back" in html
+        assert "Start" in html
+        assert "Work (s)" in html
+        assert "Rest (s)" in html
+
+    def test_combo_drill_empty_en(self):
+        from src.ui.pages.combo_drill_page import ComboDrillPage
+
+        ctx = _make_ctx(locale="en")
+        html = ComboDrillPage(ctx).render()
+        assert "No combos registered" in html
+        assert "Go to Combo Library" in html
+
+    def test_footwork_drill_empty_en(self):
+        from src.ui.pages.footwork_drill_page import FootworkDrillPage
+
+        ctx = _make_ctx(locale="en")
+        html = FootworkDrillPage(ctx).render()
+        assert "No footwork moves registered" in html
+
+    def test_combo_library_empty_en(self):
+        from src.ui.pages.combo_library_page import ComboLibraryPage
+
+        ctx = _make_ctx(locale="en")
+        html = ComboLibraryPage(ctx).render()
+        assert "No combos registered" in html
+        assert "Combo Library" in html
+
+    def test_footwork_move_empty_en(self):
+        from src.ui.pages.footwork_move_page import FootworkMovePage
+
+        ctx = _make_ctx(locale="en")
+        html = FootworkMovePage(ctx).render()
+        assert "No footwork moves registered" in html
+        assert "Footwork Moves" in html
+
+    def test_custom_workout_empty_en(self):
+        from src.ui.pages.custom_workout_page import CustomWorkoutPage
+
+        ctx = _make_ctx(locale="en")
+        html = CustomWorkoutPage(ctx).render()
+        assert "No custom workouts registered" in html
+        assert "Custom Workouts" in html
+
+    def test_timing_drill_page_en(self):
+        from src.ui.pages.timing_drill_page import TimingDrillPage
+
+        ctx = _make_ctx(locale="en")
+        html = TimingDrillPage(ctx).render()
+        assert "Total duration (s)" in html
+        assert "Target technique" in html

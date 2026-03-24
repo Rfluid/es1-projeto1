@@ -3,44 +3,45 @@ from src.ui.page import Page
 
 class HomePage(Page):
     def render(self) -> str:
-        return """
+        t = self.ctx.i18n.t
+        return f"""
         <h1>FightDrill</h1>
-        <p class="subtitle">Plataforma de Treinamento para Artes Marciais</p>
+        <p class="subtitle">{t("home.subtitle")}</p>
 
-        <h2>Modalidades de Treino</h2>
+        <h2>{t("home.drills_heading")}</h2>
         <div class="card-grid">
             <button class="nav-card" id="nav-round-timer">
                 <span class="card-icon">&#9201;</span>
                 <span class="card-title">Round Timer</span>
-                <span class="card-desc">Rounds de trabalho e descanso</span>
+                <span class="card-desc">{t("home.round_timer_desc")}</span>
             </button>
             <button class="nav-card" id="nav-timing-drill">
                 <span class="card-icon">&#9889;</span>
                 <span class="card-title">Timing Drill</span>
-                <span class="card-desc">Reação a estímulo aleatório</span>
+                <span class="card-desc">{t("home.timing_drill_desc")}</span>
             </button>
             <button class="nav-card" id="nav-combo-drill">
                 <span class="card-icon">&#9994;</span>
                 <span class="card-title">Combo Drill</span>
-                <span class="card-desc">Chamadas de combos</span>
+                <span class="card-desc">{t("home.combo_drill_desc")}</span>
             </button>
             <button class="nav-card" id="nav-footwork-drill">
                 <span class="card-icon">&#128095;</span>
                 <span class="card-title">Footwork Drill</span>
-                <span class="card-desc">Movimentação e deslocamento</span>
+                <span class="card-desc">{t("home.footwork_drill_desc")}</span>
             </button>
         </div>
 
-        <h2>Gerenciamento</h2>
+        <h2>{t("home.manage_heading")}</h2>
         <div class="card-grid">
             <button class="nav-card nav-card--manage" id="nav-combo-library">
-                <span class="card-title">Biblioteca de Combos</span>
+                <span class="card-title">{t("home.combo_library")}</span>
             </button>
             <button class="nav-card nav-card--manage" id="nav-footwork-moves">
-                <span class="card-title">Movimentações</span>
+                <span class="card-title">{t("home.footwork_moves")}</span>
             </button>
             <button class="nav-card nav-card--manage" id="nav-custom-workouts">
-                <span class="card-title">Treinos Personalizados</span>
+                <span class="card-title">{t("home.custom_workouts")}</span>
             </button>
         </div>
         """

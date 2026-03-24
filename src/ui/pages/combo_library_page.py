@@ -8,6 +8,7 @@ class ComboLibraryPage(Page):
         self._proxies = []
 
     def render(self) -> str:
+        t = self.ctx.i18n.t
         combos = self.ctx.app_state.combo_library.list_all()
         rows = ""
         for c in combos:
@@ -18,27 +19,27 @@ class ComboLibraryPage(Page):
                     <span>{c.sequence}</span>
                 </div>
                 <div class="item-actions">
-                    <button class="btn-small btn-danger btn-delete" data-name="{c.name}">Excluir</button>
+                    <button class="btn-small btn-danger btn-delete" data-name="{c.name}">{t("delete")}</button>
                 </div>
             </div>
             """
 
-        empty_msg = '<p class="empty-msg">Nenhum combo cadastrado.</p>' if not combos else ""
+        empty_msg = f'<p class="empty-msg">{t("combo_library.empty")}</p>' if not combos else ""
 
         return f"""
         <div class="page-header">
-            <button class="btn-back" id="btn-back">&#8592; Voltar</button>
-            <h1>Biblioteca de Combos</h1>
+            <button class="btn-back" id="btn-back">&#8592; {t("back")}</button>
+            <h1>{t("combo_library.title")}</h1>
         </div>
 
         <div class="config-form add-form">
-            <label>Nome
-                <input type="text" id="in-name" placeholder="ex: Combo 1">
+            <label>{t("combo_library.name")}
+                <input type="text" id="in-name" placeholder="{t("combo_library.name_placeholder")}">
             </label>
-            <label>Sequência de técnicas
-                <input type="text" id="in-sequence" placeholder="ex: jab, cross, hook">
+            <label>{t("combo_library.sequence")}
+                <input type="text" id="in-sequence" placeholder="{t("combo_library.sequence_placeholder")}">
             </label>
-            <button class="btn-primary" id="btn-add">Adicionar</button>
+            <button class="btn-primary" id="btn-add">{t("add")}</button>
             <p id="form-error" class="error-msg"></p>
         </div>
 

@@ -20,17 +20,18 @@ class ComboDrillPage(Page):
         self._proxies = []
 
     def render(self) -> str:
+        t = self.ctx.i18n.t
         combos = self.ctx.app_state.combo_library.list_all()
 
         if not combos:
-            return """
+            return f"""
             <div class="page-header">
-                <button class="btn-back" id="btn-back">&#8592; Voltar</button>
-                <h1>Combo Drill</h1>
+                <button class="btn-back" id="btn-back">&#8592; {t("back")}</button>
+                <h1>{t("combo_drill.title")}</h1>
             </div>
             <div class="empty-state">
-                <p>Nenhum combo cadastrado.</p>
-                <button class="btn-primary" id="btn-go-library">Ir para Biblioteca de Combos</button>
+                <p>{t("combo_drill.no_combos")}</p>
+                <button class="btn-primary" id="btn-go-library">{t("combo_drill.go_library")}</button>
             </div>
             """
 
@@ -45,28 +46,28 @@ class ComboDrillPage(Page):
 
         return f"""
         <div class="page-header">
-            <button class="btn-back" id="btn-back">&#8592; Voltar</button>
-            <h1>Combo Drill</h1>
+            <button class="btn-back" id="btn-back">&#8592; {t("back")}</button>
+            <h1>{t("combo_drill.title")}</h1>
         </div>
 
         <div id="config-section" class="config-form">
             <fieldset>
-                <legend>Selecione os combos</legend>
+                <legend>{t("combo_drill.select_combos")}</legend>
                 {combo_checkboxes}
             </fieldset>
-            <label>Modo de chamada
+            <label>{t("combo_drill.call_mode")}
                 <select id="in-mode">
-                    <option value="sequential">Sequencial</option>
-                    <option value="random">Aleatório</option>
+                    <option value="sequential">{t("combo_drill.mode_sequential")}</option>
+                    <option value="random">{t("combo_drill.mode_random")}</option>
                 </select>
             </label>
-            <label>Intervalo entre chamadas (s)
+            <label>{t("combo_drill.interval_s")}
                 <input type="number" id="in-interval" value="5" min="1">
             </label>
-            <label>Duração total (s)
+            <label>{t("combo_drill.duration_s")}
                 <input type="number" id="in-duration" value="180" min="1">
             </label>
-            <button class="btn-primary" id="btn-start">Iniciar</button>
+            <button class="btn-primary" id="btn-start">{t("start")}</button>
             <p id="config-error" class="error-msg"></p>
         </div>
 
@@ -77,8 +78,8 @@ class ComboDrillPage(Page):
                 <div class="combo-sequence" id="combo-sequence"></div>
             </div>
             <div class="timer-controls">
-                <button class="btn-secondary" id="btn-pause">Pausar</button>
-                <button class="btn-danger" id="btn-stop">Parar</button>
+                <button class="btn-secondary" id="btn-pause">{t("pause")}</button>
+                <button class="btn-danger" id="btn-stop">{t("stop")}</button>
             </div>
         </div>
         """
@@ -151,14 +152,15 @@ class ComboDrillPage(Page):
     def _on_pause(self) -> None:
         from js import document  # type: ignore[import-not-found]
 
+        t = self.ctx.i18n.t
         if not self._timer or not self._session:
             return
         if self._session.is_paused:
             self._timer.resume()
-            document.getElementById("btn-pause").textContent = "Pausar"
+            document.getElementById("btn-pause").textContent = t("pause")
         else:
             self._timer.pause()
-            document.getElementById("btn-pause").textContent = "Continuar"
+            document.getElementById("btn-pause").textContent = t("resume")
 
     def _on_stop(self) -> None:
         if self._timer:
@@ -175,7 +177,7 @@ class ComboDrillPage(Page):
             document.getElementById("combo-sequence").textContent = event.data["combo_sequence"]
         elif event.event_type == EventType.SESSION_END:
             self.ctx.audio_engine.play_end_signal()
-            self.ctx.announcer.announce("Fim do treino")
+            self.ctx.announcer.announce(self.ctx.i18n.t("voice.session_end"))
             self._show_config()
 
     def _update_display(self) -> None:

@@ -8,6 +8,7 @@ class FootworkMovePage(Page):
         self._proxies = []
 
     def render(self) -> str:
+        t = self.ctx.i18n.t
         moves = self.ctx.app_state.footwork_library.list_all()
         rows = ""
         for m in moves:
@@ -17,24 +18,24 @@ class FootworkMovePage(Page):
                     <strong>{m.name}</strong>
                 </div>
                 <div class="item-actions">
-                    <button class="btn-small btn-danger btn-delete" data-name="{m.name}">Excluir</button>
+                    <button class="btn-small btn-danger btn-delete" data-name="{m.name}">{t("delete")}</button>
                 </div>
             </div>
             """
 
-        empty_msg = '<p class="empty-msg">Nenhuma movimentação cadastrada.</p>' if not moves else ""
+        empty_msg = f'<p class="empty-msg">{t("footwork_move.empty")}</p>' if not moves else ""
 
         return f"""
         <div class="page-header">
-            <button class="btn-back" id="btn-back">&#8592; Voltar</button>
-            <h1>Movimentações (Footwork)</h1>
+            <button class="btn-back" id="btn-back">&#8592; {t("back")}</button>
+            <h1>{t("footwork_move.title")}</h1>
         </div>
 
         <div class="config-form add-form">
-            <label>Nome da movimentação
-                <input type="text" id="in-name" placeholder="ex: passo lateral direito">
+            <label>{t("footwork_move.name")}
+                <input type="text" id="in-name" placeholder="{t("footwork_move.name_placeholder")}">
             </label>
-            <button class="btn-primary" id="btn-add">Adicionar</button>
+            <button class="btn-primary" id="btn-add">{t("add")}</button>
             <p id="form-error" class="error-msg"></p>
         </div>
 
