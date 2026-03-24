@@ -3,7 +3,7 @@ PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 PYTEST := $(VENV)/bin/pytest
 
-.PHONY: help venv install install-dev test test-v test-k build serve dev clean
+.PHONY: help venv install install-dev test test-v test-k build validate serve dev clean
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -33,6 +33,11 @@ build: ## Generate pyscript.toml with file mappings
 		echo "\"./$$f\" = \"./$$f\""; \
 	done >> pyscript.toml
 	@echo "[build] pyscript.toml updated"
+	@$(MAKE) --no-print-directory validate
+
+validate: ## Validate pyscript.toml for TOML syntax errors (duplicate keys, etc.)
+	@python3 -c "import tomllib, sys; tomllib.load(open('pyscript.toml','rb')); print('[validate] pyscript.toml OK')" \
+		|| (echo '[validate] pyscript.toml INVALID'; exit 1)
 
 serve: build ## Build and serve the app at http://localhost:8000
 	python3 -m http.server 8000
