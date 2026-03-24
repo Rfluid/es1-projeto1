@@ -69,26 +69,27 @@ Objetivo: serialização/desserialização dos dados do domínio, com validaçã
 
 Objetivo: implementar a máquina de estados de cada modalidade de treino (sem UI).
 
-- [ ] **Classe abstrata `DrillSession`** — base para execução de qualquer treino.
-    - [ ] Atributos: `config`, `elapsed_time`, `is_running`, `is_paused`.
-    - [ ] Métodos: `start()`, `pause()`, `resume()`, `stop()`.
-    - [ ] Método abstrato `tick()` — chamado a cada ciclo do timer.
-    - [ ] Callback `on_event(event_type, data)` — para a UI reagir a eventos.
-- [ ] **Classe `RoundTimerSession(DrillSession)`** — implementa lógica de rounds.
-    - [ ] Controle de round atual, tempo restante de trabalho/descanso.
-    - [ ] Emite eventos: `ROUND_START`, `ROUND_WARNING`, `ROUND_END`, `SESSION_END`.
-- [ ] **Classe `TimingDrillSession(DrillSession)`** — implementa estímulo aleatório.
-    - [ ] Gera próximo instante de estímulo aleatório dentro do intervalo configurado.
-    - [ ] Emite eventos: `STIMULUS`, `SESSION_END`.
-- [ ] **Classe `ComboDrillSession(DrillSession)`** — implementa chamadas de combo.
-    - [ ] Modo sequencial: iteração cíclica (**RN02**).
-    - [ ] Modo aleatório: sem repetição consecutiva (**RN02**).
-    - [ ] Emite eventos: `COMBO_CALL(combo)`, `SESSION_END`.
-- [ ] **Classe `FootworkDrillSession(DrillSession)`** — implementa chamadas de movimentação.
-    - [ ] Escolha aleatória entre movimentações selecionadas.
-    - [ ] Emite eventos: `MOVE_CALL(move)`, `SESSION_END`.
-- [ ] **Classe `DrillTimer`** — wrapper de `setInterval`/`requestAnimationFrame` para chamar `tick()` com precisão (**RNF01**).
-- [ ] Testes unitários para lógica de cada sessão (simulação de ticks).
+- [x] **Classe abstrata `DrillSession`** — base para execução de qualquer treino. `src/session/drill_session.py`
+    - [x] Atributos: `config`, `elapsed`, `is_running`, `is_paused`, `is_finished`.
+    - [x] Métodos: `start()`, `pause()`, `resume()`, `stop()`.
+    - [x] Método abstrato `_on_tick()` — chamado a cada ciclo do timer.
+    - [x] Callback `on_event(callback)` — para a UI reagir a eventos.
+- [x] **Classe `RoundTimerSession(DrillSession)`** — implementa lógica de rounds. `src/session/round_timer_session.py`
+    - [x] Controle de round atual, tempo restante de trabalho/descanso.
+    - [x] Emite eventos: `ROUND_START`, `ROUND_WARNING`, `ROUND_END`, `REST_END`, `SESSION_END`.
+- [x] **Classe `TimingDrillSession(DrillSession)`** — implementa estímulo aleatório. `src/session/timing_drill_session.py`
+    - [x] Gera próximo instante de estímulo aleatório dentro do intervalo configurado.
+    - [x] Emite eventos: `STIMULUS`, `SESSION_END`.
+- [x] **Classe `ComboDrillSession(DrillSession)`** — implementa chamadas de combo. `src/session/combo_drill_session.py`
+    - [x] Modo sequencial: iteração cíclica (**RN02**).
+    - [x] Modo aleatório: sem repetição consecutiva (**RN02**).
+    - [x] Emite eventos: `COMBO_CALL(combo)`, `SESSION_END`.
+- [x] **Classe `FootworkDrillSession(DrillSession)`** — implementa chamadas de movimentação. `src/session/footwork_drill_session.py`
+    - [x] Escolha aleatória entre movimentações selecionadas.
+    - [x] Emite eventos: `MOVE_CALL(move)`, `SESSION_END`.
+- [x] **Tipos de evento** — `EventType` enum + `DrillEvent` dataclass. `src/session/events.py`
+- [ ] **Classe `DrillTimer`** — wrapper de `setInterval`/`requestAnimationFrame` para chamar `tick()` com precisão (**RNF01**). _(será implementada na Fase 5 junto com a UI)_
+- [x] Testes unitários para lógica de cada sessão via simulação de ticks (37 testes — `tests/test_round_timer_session.py`, `tests/test_timing_drill_session.py`, `tests/test_combo_drill_session.py`, `tests/test_footwork_drill_session.py`).
 
 ---
 
