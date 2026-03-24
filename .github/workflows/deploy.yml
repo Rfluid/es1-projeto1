@@ -26,6 +26,7 @@ jobs:
               uses: actions/upload-pages-artifact@v3
               with:
                   path: .
+                  include-hidden-files: true
 
     deploy:
         needs: build
