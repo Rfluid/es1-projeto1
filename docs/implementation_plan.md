@@ -35,13 +35,15 @@ Objetivo: definir todas as classes do domínio, sem UI nem persistência. Cada c
 
 Objetivo: abstrair a Web Audio API para emissão de sinais sonoros e anúncios por voz sintética (Speech Synthesis API).
 
-- [ ] **Classe `AudioEngine`** — encapsula `AudioContext` (Web Audio API).
-    - [ ] Método `play_tone(frequency, duration)` — gera tom senoidal (beep).
-    - [ ] Método `play_start_signal()` — sinal de início de round/drill.
-    - [ ] Método `play_warning_signal()` — sinal de aviso de fim de round.
-    - [ ] Método `play_end_signal()` — sinal de fim de round/drill.
-- [ ] **Classe `Announcer`** — encapsula Speech Synthesis API do navegador.
-    - [ ] Método `announce(text)` — reproduz nome do combo/movimentação via voz sintética (**RN06**).
+- [x] **Classe `AudioEngine`** — encapsula `AudioContext` (Web Audio API). `src/audio/audio_engine.py`
+    - [x] Método `play_tone(frequency, duration)` — gera tom senoidal (beep).
+    - [x] Método `play_start_signal()` — sinal de início de round/drill.
+    - [x] Método `play_warning_signal()` — sinal de aviso de fim de round.
+    - [x] Método `play_end_signal()` — sinal de fim de round/drill.
+- [x] **Classe `Announcer`** — encapsula Speech Synthesis API do navegador. `src/audio/announcer.py`
+    - [x] Método `announce(text)` — reproduz nome do combo/movimentação via voz sintética (**RN06**).
+- [x] **Backends do navegador** — `WebAudioPlayer` (TonePlayer) e `WebSpeechBackend` (SpeechBackend). `src/audio/web_backends.py`
+- [x] Testes unitários via fake backends (16 testes — `tests/test_audio_engine.py`, `tests/test_announcer.py`).
 - [ ] Testes manuais de reprodução de áudio no navegador.
 
 ---
