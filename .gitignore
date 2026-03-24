@@ -4,6 +4,7 @@ __pycache__/
 
 # Build artifacts
 src.zip
+*.zip
 
 # Personal
 /logs
