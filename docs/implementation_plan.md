@@ -52,15 +52,16 @@ Objetivo: abstrair a Web Audio API para emissão de sinais sonoros e anúncios p
 
 Objetivo: serialização/desserialização dos dados do domínio, com validação de integridade (**RNF07**).
 
-- [ ] **Classe `StorageManager`** — interface de leitura/escrita no `localStorage`.
-    - [ ] Método `save(key, data)` — serializa para JSON e salva.
-    - [ ] Método `load(key) -> dict | None` — lê e desserializa JSON.
-    - [ ] Método `clear(key)` — remove chave.
-- [ ] **Classe `AppState`** — centraliza o estado da aplicação (bibliotecas de combos, movimentações, treinos personalizados, calendário).
-    - [ ] Método `save()` — persiste estado completo via `StorageManager`.
-    - [ ] Método `load()` — restaura estado do `localStorage`; se dados corrompidos, inicializa estado padrão e notifica usuário (**RNF07**).
-    - [ ] Método `to_dict()` / `from_dict(data)` — conversão de/para dicionário.
-- [ ] Testes unitários para serialização/desserialização e tratamento de dados inválidos.
+- [x] **Classe `StorageManager`** — interface de leitura/escrita no `localStorage`. `src/persistence/storage_manager.py`
+    - [x] Método `save(key, data)` — serializa para JSON e salva.
+    - [x] Método `load(key) -> dict | None` — lê e desserializa JSON. Raises `ValueError` se JSON corrompido.
+    - [x] Método `clear(key)` — remove chave.
+- [x] **Classe `AppState`** — centraliza o estado da aplicação (bibliotecas de combos, movimentações, treinos personalizados, calendário). `src/persistence/app_state.py`
+    - [x] Método `save()` — persiste estado completo via `StorageManager`.
+    - [x] Método `load()` — restaura estado do `localStorage`; se dados corrompidos, inicializa estado padrão e notifica usuário (**RNF07**).
+    - [x] Método `to_dict()` / `_load_from_dict(data)` — conversão de/para dicionário.
+- [x] **Backend do navegador** — `LocalStorageBackend`. `src/persistence/web_backend.py`
+- [x] Testes unitários para serialização/desserialização e tratamento de dados inválidos (21 testes — `tests/test_storage_manager.py`, `tests/test_app_state.py`).
 
 ---
 
