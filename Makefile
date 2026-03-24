@@ -3,7 +3,7 @@ PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 PYTEST := $(VENV)/bin/pytest
 
-.PHONY: help venv install install-dev test test-v lint clean
+.PHONY: help venv install install-dev test test-v test-k build serve dev clean
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -27,7 +27,25 @@ test-v: install-dev ## Run all tests with verbose output
 test-k: install-dev ## Run tests matching pattern: make test-k K=<pattern>
 	$(PYTEST) tests/ -v -k "$(K)"
 
-clean: ## Remove venv and caches
+build: ## Generate pyscript.toml with file mappings
+	@echo '[files]' > pyscript.toml
+	@find src -name '*.py' ! -path '*__pycache__*' | sort | while read f; do \
+		echo "\"./$$f\" = \"./$$f\""; \
+	done >> pyscript.toml
+	@echo "[build] pyscript.toml updated"
+
+serve: build ## Build and serve the app at http://localhost:8000
+	python3 -m http.server 8000
+
+dev: install-dev build ## Serve with auto-rebuild on src/ changes (reload browser manually)
+	$(VENV)/bin/watchmedo shell-command \
+		--patterns="*.py" \
+		--recursive \
+		--command='$(MAKE) build' \
+		src/ &
+	python3 -m http.server 8000
+
+clean: ## Remove venv, caches, and build artifacts
 	rm -rf $(VENV) __pycache__ .pytest_cache
 	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
 	find . -type d -name .pytest_cache -exec rm -rf {} + 2>/dev/null; true
