@@ -1,27 +1,61 @@
-# Fight Drill
+# FightDrill
 
-## Installation
+Plataforma web de treinamento para artes marciais e esportes de combate.
+Oferece modalidades de treino assistido por computador com estímulos sonoros, controle de tempo e gerenciamento de combinações de técnicas.
+
+Desenvolvido como projeto da disciplina de Engenharia de Software I — UFSC, 2025/1.
+
+## Stack
+
+- **Python 3.12** com **PyScript** (execução no navegador via WebAssembly)
+- HTML + CSS (sem framework frontend)
+- Sem backend — toda persistência via `localStorage`
+
+## Estrutura do projeto
+
+```
+src/
+  domain/          # Modelo de domínio (classes de negócio)
+  audio/           # Motor de áudio (Web Audio API + Speech Synthesis)
+tests/             # Testes unitários (pytest)
+docs/              # Documentação e plano de implementação
+statement/         # Enunciado do projeto
+```
+
+## Setup
 
 ```bash
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
-## Compile reports
-
-### Entrega 1
-
-Compilation command available at `compile-entrega1.txt`:
+## Comandos (via Make)
 
 ```bash
-pandoc entrega1.md -o entrega1.pdf --pdf-engine=xelatex --citeproc
+make help         # Mostra todos os targets disponíveis
+make test         # Executa todos os testes
+make test-v       # Executa testes com saída detalhada
+make test-k K=combo  # Executa testes que correspondem ao padrão
+make clean        # Remove venv e caches
 ```
 
-## Manage dependencies
+## Gerenciamento de dependências
 
 ```bash
 # Adicionar pacote: editar requirements.in, depois:
 pip-compile requirements.in -o requirements.txt
 pip install -r requirements.txt
 ```
+
+## Compilar relatórios
+
+```bash
+pandoc entrega1.md -o entrega1.pdf --pdf-engine=xelatex --citeproc
+```
+
+## Autores
+
+- Pedro Artur de Aguiar Cabral
+- Ruy Agostinho Otoni Vieira Neto
+- Vitor Pedrosa Brito dos Santos
