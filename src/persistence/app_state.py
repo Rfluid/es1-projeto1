@@ -25,6 +25,7 @@ class AppState:
         self.workout_library = CustomWorkoutLibrary()
         self.audio_volume: float = 1.0
         self.voice_volume: float = 1.0
+        self.voice_rate: float = 1.0
         self._load_error: str | None = None
 
     @property
@@ -38,6 +39,7 @@ class AppState:
             "custom_workouts": self.workout_library.to_dict(),
             "audio_volume": self.audio_volume,
             "voice_volume": self.voice_volume,
+            "voice_rate": self.voice_rate,
         }
 
     def _load_from_dict(self, data: Any) -> None:
@@ -54,6 +56,7 @@ class AppState:
         self.workout_library = CustomWorkoutLibrary.from_dict(data["custom_workouts"])
         self.audio_volume = float(data.get("audio_volume", 1.0))
         self.voice_volume = float(data.get("voice_volume", 1.0))
+        self.voice_rate = float(data.get("voice_rate", 1.0))
 
     def save(self) -> None:
         self._storage.save(APP_STATE_KEY, self.to_dict())

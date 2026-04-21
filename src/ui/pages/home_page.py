@@ -6,6 +6,7 @@ class HomePage(Page):
         t = self.ctx.i18n.t
         audio_vol = int(self.ctx.app_state.audio_volume * 100)
         voice_vol = int(self.ctx.app_state.voice_volume * 100)
+        voice_rate = int(self.ctx.app_state.voice_rate * 100)
         return f"""
         <h1>FightDrill</h1>
         <p class="subtitle">{t("home.subtitle")}</p>
@@ -53,6 +54,8 @@ class HomePage(Page):
             <input type="range" id="slider-audio-volume" min="0" max="100" value="{audio_vol}">
             <label for="slider-voice-volume">{t("home.voice_volume")}: <span id="lbl-voice-volume">{voice_vol}%</span></label>
             <input type="range" id="slider-voice-volume" min="0" max="100" value="{voice_vol}">
+            <label for="slider-voice-rate">{t("home.voice_rate")}: <span id="lbl-voice-rate">{voice_rate}%</span></label>
+            <input type="range" id="slider-voice-rate" min="50" max="200" step="10" value="{voice_rate}">
         </div>
         """
 
@@ -89,11 +92,20 @@ class HomePage(Page):
             self.ctx.app_state.save()
             document.getElementById("lbl-voice-volume").textContent = f"{int(e.target.value)}%"
 
+        def on_voice_rate(e):
+            rate = int(e.target.value) / 100
+            self.ctx.announcer.rate = rate
+            self.ctx.app_state.voice_rate = rate
+            self.ctx.app_state.save()
+            document.getElementById("lbl-voice-rate").textContent = f"{int(e.target.value)}%"
+
         p_audio = create_proxy(on_audio_volume)
         p_voice = create_proxy(on_voice_volume)
+        p_rate = create_proxy(on_voice_rate)
         document.getElementById("slider-audio-volume").addEventListener("input", p_audio)
         document.getElementById("slider-voice-volume").addEventListener("input", p_voice)
-        self._proxies.extend([p_audio, p_voice])
+        document.getElementById("slider-voice-rate").addEventListener("input", p_rate)
+        self._proxies.extend([p_audio, p_voice, p_rate])
 
     def destroy(self) -> None:
         if hasattr(self, "_proxies"):

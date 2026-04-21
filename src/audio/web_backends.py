@@ -36,10 +36,11 @@ class WebSpeechBackend:
     def __init__(self, lang: str = "en-US") -> None:
         self._lang = lang
 
-    def speak(self, text: str, volume: float = 1.0) -> None:
+    def speak(self, text: str, volume: float = 1.0, rate: float = 1.0) -> None:
         from js import window  # type: ignore[import-not-found]
 
         utterance = window.SpeechSynthesisUtterance.new(text)
         utterance.lang = self._lang
         utterance.volume = volume
+        utterance.rate = rate
         window.speechSynthesis.speak(utterance)

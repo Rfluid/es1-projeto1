@@ -7,6 +7,8 @@ class SignalType(Enum):
     START = "start"
     WARNING = "warning"
     END = "end"
+    COUNTDOWN_TICK = "countdown_tick"
+    COUNTDOWN_END = "countdown_end"
 
 
 @dataclass(frozen=True)
@@ -29,6 +31,13 @@ SIGNAL_TONES: dict[SignalType, list[ToneSpec]] = {
     SignalType.END: [
         ToneSpec(frequency=1000, duration=0.5),
         ToneSpec(frequency=600, duration=0.5),
+    ],
+    SignalType.COUNTDOWN_TICK: [
+        ToneSpec(frequency=480, duration=0.08),
+    ],
+    SignalType.COUNTDOWN_END: [
+        ToneSpec(frequency=880, duration=0.15),
+        ToneSpec(frequency=1100, duration=0.25),
     ],
 }
 
@@ -83,6 +92,12 @@ class AudioEngine:
 
     def play_end_signal(self) -> None:
         self.play_signal(SignalType.END)
+
+    def play_countdown_tick_signal(self) -> None:
+        self.play_signal(SignalType.COUNTDOWN_TICK)
+
+    def play_countdown_end_signal(self) -> None:
+        self.play_signal(SignalType.COUNTDOWN_END)
 
     def get_signal_tones(self, signal_type: SignalType) -> list[ToneSpec]:
         return list(self._signals.get(signal_type, []))

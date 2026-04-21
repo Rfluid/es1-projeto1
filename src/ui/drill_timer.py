@@ -1,5 +1,6 @@
 from collections.abc import Callable
 
+from src.audio.audio_engine import AudioEngine
 from src.session.drill_session import DrillSession
 
 COUNTDOWN_SECONDS = 3
@@ -13,10 +14,12 @@ class DrillTimer:
         session: DrillSession,
         on_tick: Callable[[], None],
         on_countdown: Callable[[int], None] | None = None,
+        audio_engine: AudioEngine | None = None,
     ) -> None:
         self._session = session
         self._on_tick = on_tick
         self._on_countdown = on_countdown
+        self._audio = audio_engine
         self._interval_id: int | None = None
         self._proxy = None
         self._countdown_remaining: int = 0
@@ -35,12 +38,16 @@ class DrillTimer:
         def _countdown_tick():
             self._countdown_remaining -= 1
             if self._countdown_remaining > 0:
+                if self._audio:
+                    self._audio.play_countdown_tick_signal()
                 if self._on_countdown:
                     self._on_countdown(self._countdown_remaining)
             else:
                 self._in_countdown = False
                 self._clear_interval()
                 self._session.start()
+                if self._audio:
+                    self._audio.play_countdown_end_signal()
                 if self._on_countdown:
                     self._on_countdown(0)
 

@@ -35,6 +35,7 @@ announcer = Announcer(WebSpeechBackend(lang=i18n.speech_lang))
 
 audio_engine.volume = app_state.audio_volume
 announcer.volume = app_state.voice_volume
+announcer.rate = app_state.voice_rate
 
 router = Router("app")
 ctx = AppContext(

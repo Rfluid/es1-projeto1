@@ -138,7 +138,8 @@ class FootworkDrillPage(Page):
         self._session = FootworkDrillSession(config)
         self._session.on_event(self._handle_event)
         self._timer = DrillTimer(
-            self._session, self._update_display, self._on_countdown
+            self._session, self._update_display, self._on_countdown,
+            audio_engine=self.ctx.audio_engine,
         )
         self._timer.start()
 

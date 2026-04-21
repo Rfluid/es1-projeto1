@@ -32,6 +32,7 @@ class TestAppStateToDict:
             "custom_workouts": [],
             "audio_volume": 1.0,
             "voice_volume": 1.0,
+            "voice_rate": 1.0,
         }
 
     def test_populated_state(self):

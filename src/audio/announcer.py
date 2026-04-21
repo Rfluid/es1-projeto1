@@ -8,7 +8,7 @@ class SpeechBackend(Protocol):
     In tests this is replaced by a mock/fake.
     """
 
-    def speak(self, text: str, volume: float = 1.0) -> None: ...
+    def speak(self, text: str, volume: float = 1.0, rate: float = 1.0) -> None: ...
 
 
 class Announcer:
@@ -22,6 +22,7 @@ class Announcer:
         self._backend = backend
         self._enabled = True
         self._volume: float = 1.0
+        self._rate: float = 1.0
 
     @property
     def enabled(self) -> bool:
@@ -39,10 +40,18 @@ class Announcer:
     def volume(self, value: float) -> None:
         self._volume = max(0.0, min(1.0, value))
 
+    @property
+    def rate(self) -> float:
+        return self._rate
+
+    @rate.setter
+    def rate(self, value: float) -> None:
+        self._rate = max(0.1, min(4.0, value))
+
     def announce(self, text: str) -> None:
         if not self._enabled:
             return
         cleaned = text.strip()
         if not cleaned:
             return
-        self._backend.speak(cleaned, self._volume)
+        self._backend.speak(cleaned, self._volume, self._rate)

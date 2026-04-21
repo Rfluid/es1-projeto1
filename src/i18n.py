@@ -16,6 +16,7 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "home.settings_heading": "Configurações de Áudio",
         "home.audio_volume": "Volume dos beeps",
         "home.voice_volume": "Volume da voz",
+        "home.voice_rate": "Velocidade da voz",
         # -- Common --
         "back": "Voltar",
         "start": "Iniciar",
@@ -104,6 +105,7 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "home.settings_heading": "Audio Settings",
         "home.audio_volume": "Beep volume",
         "home.voice_volume": "Voice volume",
+        "home.voice_rate": "Voice speed",
         # -- Common --
         "back": "Back",
         "start": "Start",
