@@ -13,6 +13,9 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "home.combo_library": "Biblioteca de Combos",
         "home.footwork_moves": "Movimentações",
         "home.custom_workouts": "Treinos Personalizados",
+        "home.settings_heading": "Configurações de Áudio",
+        "home.audio_volume": "Volume dos beeps",
+        "home.voice_volume": "Volume da voz",
         # -- Common --
         "back": "Voltar",
         "start": "Iniciar",
@@ -98,6 +101,9 @@ _TRANSLATIONS: dict[str, dict[str, str]] = {
         "home.combo_library": "Combo Library",
         "home.footwork_moves": "Footwork Moves",
         "home.custom_workouts": "Custom Workouts",
+        "home.settings_heading": "Audio Settings",
+        "home.audio_volume": "Beep volume",
+        "home.voice_volume": "Voice volume",
         # -- Common --
         "back": "Back",
         "start": "Start",

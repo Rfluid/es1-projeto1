@@ -23,6 +23,8 @@ class AppState:
         self.combo_library = ComboLibrary()
         self.footwork_library = FootworkMoveLibrary()
         self.workout_library = CustomWorkoutLibrary()
+        self.audio_volume: float = 1.0
+        self.voice_volume: float = 1.0
         self._load_error: str | None = None
 
     @property
@@ -34,6 +36,8 @@ class AppState:
             "combos": self.combo_library.to_dict(),
             "footwork_moves": self.footwork_library.to_dict(),
             "custom_workouts": self.workout_library.to_dict(),
+            "audio_volume": self.audio_volume,
+            "voice_volume": self.voice_volume,
         }
 
     def _load_from_dict(self, data: Any) -> None:
@@ -48,6 +52,8 @@ class AppState:
         self.combo_library = ComboLibrary.from_dict(data["combos"])
         self.footwork_library = FootworkMoveLibrary.from_dict(data["footwork_moves"])
         self.workout_library = CustomWorkoutLibrary.from_dict(data["custom_workouts"])
+        self.audio_volume = float(data.get("audio_volume", 1.0))
+        self.voice_volume = float(data.get("voice_volume", 1.0))
 
     def save(self) -> None:
         self._storage.save(APP_STATE_KEY, self.to_dict())

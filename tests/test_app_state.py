@@ -30,6 +30,8 @@ class TestAppStateToDict:
             "combos": [],
             "footwork_moves": [],
             "custom_workouts": [],
+            "audio_volume": 1.0,
+            "voice_volume": 1.0,
         }
 
     def test_populated_state(self):

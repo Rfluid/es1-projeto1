@@ -5,10 +5,10 @@ class FakeSpeechBackend:
     """Records all speak calls for assertion."""
 
     def __init__(self) -> None:
-        self.calls: list[str] = []
+        self.calls: list[tuple[str, float]] = []
 
-    def speak(self, text: str) -> None:
-        self.calls.append(text)
+    def speak(self, text: str, volume: float = 1.0) -> None:
+        self.calls.append((text, volume))
 
 
 class TestAnnouncer:
@@ -16,13 +16,13 @@ class TestAnnouncer:
         backend = FakeSpeechBackend()
         announcer = Announcer(backend)
         announcer.announce("Combo 1")
-        assert backend.calls == ["Combo 1"]
+        assert backend.calls == [("Combo 1", 1.0)]
 
     def test_announce_strips_whitespace(self):
         backend = FakeSpeechBackend()
         announcer = Announcer(backend)
         announcer.announce("  lateral step  ")
-        assert backend.calls == ["lateral step"]
+        assert backend.calls == [("lateral step", 1.0)]
 
     def test_announce_empty_string_ignored(self):
         backend = FakeSpeechBackend()
@@ -50,7 +50,7 @@ class TestAnnouncer:
         announcer.announce("Combo 1")
         announcer.enabled = True
         announcer.announce("Combo 2")
-        assert backend.calls == ["Combo 2"]
+        assert backend.calls == [("Combo 2", 1.0)]
 
     def test_enabled_default_true(self):
         backend = FakeSpeechBackend()
@@ -63,4 +63,25 @@ class TestAnnouncer:
         announcer.announce("jab")
         announcer.announce("cross")
         announcer.announce("hook")
-        assert backend.calls == ["jab", "cross", "hook"]
+        assert backend.calls == [("jab", 1.0), ("cross", 1.0), ("hook", 1.0)]
+
+    def test_volume_default_is_one(self):
+        announcer = Announcer(FakeSpeechBackend())
+        assert announcer.volume == 1.0
+
+    def test_volume_passed_to_backend(self):
+        backend = FakeSpeechBackend()
+        announcer = Announcer(backend)
+        announcer.volume = 0.5
+        announcer.announce("jab")
+        assert backend.calls == [("jab", 0.5)]
+
+    def test_volume_clamped_to_zero(self):
+        announcer = Announcer(FakeSpeechBackend())
+        announcer.volume = -0.5
+        assert announcer.volume == 0.0
+
+    def test_volume_clamped_to_one(self):
+        announcer = Announcer(FakeSpeechBackend())
+        announcer.volume = 1.5
+        assert announcer.volume == 1.0

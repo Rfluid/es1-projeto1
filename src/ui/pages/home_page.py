@@ -4,6 +4,8 @@ from src.ui.page import Page
 class HomePage(Page):
     def render(self) -> str:
         t = self.ctx.i18n.t
+        audio_vol = int(self.ctx.app_state.audio_volume * 100)
+        voice_vol = int(self.ctx.app_state.voice_volume * 100)
         return f"""
         <h1>FightDrill</h1>
         <p class="subtitle">{t("home.subtitle")}</p>
@@ -44,6 +46,14 @@ class HomePage(Page):
                 <span class="card-title">{t("home.custom_workouts")}</span>
             </button>
         </div>
+
+        <h2>{t("home.settings_heading")}</h2>
+        <div class="settings-section">
+            <label for="slider-audio-volume">{t("home.audio_volume")}: <span id="lbl-audio-volume">{audio_vol}%</span></label>
+            <input type="range" id="slider-audio-volume" min="0" max="100" value="{audio_vol}">
+            <label for="slider-voice-volume">{t("home.voice_volume")}: <span id="lbl-voice-volume">{voice_vol}%</span></label>
+            <input type="range" id="slider-voice-volume" min="0" max="100" value="{voice_vol}">
+        </div>
         """
 
     def mount(self) -> None:
@@ -64,6 +74,26 @@ class HomePage(Page):
             proxy = create_proxy(lambda e, p=path: self.ctx.router.navigate(p))
             document.getElementById(elem_id).addEventListener("click", proxy)
             self._proxies.append(proxy)
+
+        def on_audio_volume(e):
+            vol = int(e.target.value) / 100
+            self.ctx.audio_engine.volume = vol
+            self.ctx.app_state.audio_volume = vol
+            self.ctx.app_state.save()
+            document.getElementById("lbl-audio-volume").textContent = f"{int(e.target.value)}%"
+
+        def on_voice_volume(e):
+            vol = int(e.target.value) / 100
+            self.ctx.announcer.volume = vol
+            self.ctx.app_state.voice_volume = vol
+            self.ctx.app_state.save()
+            document.getElementById("lbl-voice-volume").textContent = f"{int(e.target.value)}%"
+
+        p_audio = create_proxy(on_audio_volume)
+        p_voice = create_proxy(on_voice_volume)
+        document.getElementById("slider-audio-volume").addEventListener("input", p_audio)
+        document.getElementById("slider-voice-volume").addEventListener("input", p_voice)
+        self._proxies.extend([p_audio, p_voice])
 
     def destroy(self) -> None:
         if hasattr(self, "_proxies"):

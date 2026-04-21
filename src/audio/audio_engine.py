@@ -57,14 +57,23 @@ class AudioEngine:
     ) -> None:
         self._player = player
         self._signals = signals if signals is not None else dict(SIGNAL_TONES)
+        self._volume: float = 1.0
+
+    @property
+    def volume(self) -> float:
+        return self._volume
+
+    @volume.setter
+    def volume(self, value: float) -> None:
+        self._volume = max(0.0, min(1.0, value))
 
     def play_tone(self, frequency: float, duration: float, volume: float = 1.0) -> None:
-        self._player.play_tone(frequency, duration, volume)
+        self._player.play_tone(frequency, duration, volume * self._volume)
 
     def play_signal(self, signal_type: SignalType) -> None:
         tones = self._signals.get(signal_type, [])
         for tone in tones:
-            self._player.play_tone(tone.frequency, tone.duration, tone.volume)
+            self._player.play_tone(tone.frequency, tone.duration, tone.volume * self._volume)
 
     def play_start_signal(self) -> None:
         self.play_signal(SignalType.START)
