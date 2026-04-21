@@ -1,0 +1,1 @@
+pandoc entrega2.md -o entrega2.pdf --pdf-engine=xelatex --citeproc
